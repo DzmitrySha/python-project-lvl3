@@ -7,6 +7,9 @@ package-install:
 package-uninstall:
 		python3 -m pip uninstall --yes dist/*.whl
 
+run:
+		poetry run page-loader
+
 selfcheck:
 		poetry check
 
