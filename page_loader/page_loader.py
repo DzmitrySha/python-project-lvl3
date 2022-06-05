@@ -1,5 +1,8 @@
 # Downloader
 
+import requests
 
-def download(source_path, temp_path='var/tmp'):
-    pass
+
+def download(source_path: str, temp_path='var/tmp'):
+    r = requests.get(source_path)
+    return r.text
