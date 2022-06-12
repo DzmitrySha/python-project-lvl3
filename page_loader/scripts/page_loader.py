@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Page Loader Script."""
 
+import os
 import argparse
 from page_loader.page_loader import download
 
@@ -13,7 +14,7 @@ def main():
                     "to the specified folder.")
     parser.add_argument('source_path', type=str)
     parser.add_argument('-o', '--output',
-                        default="temp_folder")
+                        default=os.getcwd())
     args = parser.parse_args()
     print(download(args.source_path, args.output))
 
