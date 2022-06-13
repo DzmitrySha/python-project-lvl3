@@ -1,28 +1,33 @@
 # Downloader
 
 import os
+import re
 import requests
 from urllib.parse import urlparse
 
 
-def strip_scheme(url: str) -> str:
+def strip_url(url: str) -> str:
     parsed = urlparse(url)
     scheme = "%s://" % parsed.scheme
-    if not url.endswith(".html"):
-        return parsed.geturl().replace(scheme, '', 1) + ".html"
-    # [a - zA - Z0 - 9] , import re
     return parsed.geturl().replace(scheme, '', 1)
 
 
-def url_to_string(url: str) -> str:
-    return str(url)
+def to_string(url: str) -> str:
+    result = ''
+    for char in strip_url(url):
+        if not re.match('[a-zA-Z0-9]', char):
+            result += '-'
+        else:
+            result += char
+
+    return result + ".html"
 
 
 def download(url: str, temp_folder=''):
     r = requests.get(url)
-    # url_string = url_to_string(url)
-    file_path = os.path.join(os.path.dirname(__file__),
-                             temp_folder, 'result_file')
+
+    file_path = os.path.join(temp_folder, to_string(url))
+
     with open(file_path, 'w') as file:
         file.write(r.text)
     # with open(file_path, 'r') as file:
