@@ -20,15 +20,15 @@
 
 **Запуск скрипта с выбором папки для сохранения файлов:** 
 
-`page-loader --output <source_url> <your_exist_folder_path>`
+`page-loader --output <exist_folder_path> <source_url>`
 
 или
 
-`page-loader -o <source_url> <your_exist_folder_path>`
-
-## Примеры работы программы "Загрузчик страниц":
+`page-loader -o <exist_folder_path> <source_url> `
 
 ---
+
+## Примеры работы программы "Загрузчик страниц":
 
 Скачивание html страницы по указанному url:
 
