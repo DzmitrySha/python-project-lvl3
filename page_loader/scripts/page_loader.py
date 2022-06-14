@@ -1,22 +1,14 @@
 #!/usr/bin/env python
 """Page Loader Script."""
 
-import os
-import argparse
 from page_loader.page_loader import download
+from page_loader.cli import parse_args_
 
 
 def main():
     """Get start here."""
-    parser = argparse.ArgumentParser(
-        prog='page_loader',
-        description="Downloads a page from the internet "
-                    "to the specified folder.")
-    parser.add_argument('source_path', type=str)
-    parser.add_argument('-o', '--output',
-                        default=os.getcwd())
-    args = parser.parse_args()
-    print(download(args.source_path, args.output))
+    source_url, output = parse_args_()
+    print(download(source_url, output))
 
 
 if __name__ == '__main__':
