@@ -16,6 +16,9 @@ selfcheck:
 test:
 		poetry run pytest
 
+test-cov:
+		poetry run pytest --cov
+
 lint:
 		poetry run flake8 page_loader
 
