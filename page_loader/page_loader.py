@@ -13,7 +13,7 @@ def cut_url_scheme(url: str) -> str:
     return parsed_url.geturl().replace(scheme, '', 1)
 
 
-def make_html_filename(url: str) -> str:
+def url_to_filename(url: str) -> str:
     """Make file-name.html from url."""
     indent = '-'
     mask = '[a-zA-Z0-9]'
@@ -27,7 +27,7 @@ def make_html_filename(url: str) -> str:
 def download(url: str, temp_folder='') -> str:
     """Download html page, save to exist specified folder."""
     r = requests.get(url)
-    file_path = os.path.join(temp_folder, make_html_filename(url))
+    file_path = os.path.join(temp_folder, url_to_filename(url))
 
     with open(file_path, 'w') as file:
         file.write(r.text)
