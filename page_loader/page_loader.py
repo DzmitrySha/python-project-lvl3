@@ -24,12 +24,16 @@ def url_to_filename(url: str) -> str:
     return result + ext if os.path.splitext(url)[1] != ext else result
 
 
+def write_to_file(file_path, text):
+    """Write text to file."""
+    with open(file_path, 'w') as file:
+        file.write(text)
+
+
 def download(url: str, temp_folder='') -> str:
     """Download html page, save to exist specified folder."""
-    r = requests.get(url)
-    file_path = os.path.join(temp_folder, url_to_filename(url))
-
-    with open(file_path, 'w') as file:
-        file.write(r.text)
-
+    response = requests.get(url)
+    filename = url_to_filename(url)
+    file_path = os.path.join(temp_folder, filename)
+    write_to_file(file_path, response.text)
     return file_path
