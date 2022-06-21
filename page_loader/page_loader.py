@@ -1,4 +1,4 @@
-# Downloader
+"""Page loader - main module."""
 
 import os
 import re

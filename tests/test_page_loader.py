@@ -1,4 +1,4 @@
-# Page loader tests
+"""Page loader tests"""
 
 import os
 import pytest

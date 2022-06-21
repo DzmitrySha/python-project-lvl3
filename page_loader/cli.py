@@ -1,4 +1,4 @@
-# parsing command line
+"""Parsing args from command line."""
 
 import os
 import argparse
