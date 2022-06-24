@@ -4,7 +4,7 @@ import os
 import pytest
 import requests
 from unittest.mock import Mock
-from page_loader.page_loader import download, url_to_filename
+from page_loader.html_loader import html_download, url_to_filename
 
 FIXTURES_FOLDER = 'fixtures'
 
