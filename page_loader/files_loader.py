@@ -11,12 +11,12 @@ def make_dir(url, temp_folder=''):
     pass
 
 
-def img_download(url, temp_folder=''):
+def files_download(url, temp_folder=''):
     soup = BeautifulSoup(url, 'html.parser')
-    img_urls = soup.find_all('a')
+    files_urls = soup.find_all('a')
     domain_name = urlparse(url).netloc
 
-    for img_url in img_urls:
+    for img_url in files_urls:
         if domain_name in img_url:
             r = requests.get(img_url)
             with open(img_url, "wb") as img:
