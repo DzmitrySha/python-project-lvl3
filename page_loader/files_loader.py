@@ -7,16 +7,21 @@ from urllib.parse import urlparse
 from page_loader.naming import make_name
 
 
-def make_dir(url):
-    temp_folder = make_name(url, ext="_files")
-    os.mkdir(temp_folder)
-    return temp_folder
+def write_to_file(file_path: str, text: str):
+    """Write text to file."""
+    with open(file_path, 'w') as file:
+        file.write(text)
 
 
-def files_download(url):
+def files_download(url: str, temp_folder=""):
     soup = BeautifulSoup(url, 'html.parser')
     files_urls = soup.find_all('a')
     domain_name = urlparse(url).netloc
+
+    dir_path = os.path.join(temp_folder, make_name(url, ext="_files"))
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+    os.chdir(dir_path)
 
     for file_url in files_urls:
         if domain_name in (file_url, ""):
