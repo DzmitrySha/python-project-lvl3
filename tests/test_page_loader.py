@@ -4,7 +4,7 @@ import os
 import pytest
 import requests
 from unittest.mock import Mock
-from page_loader.html_loader import html_download, url_to_filename
+from page_loader.naming import make_name
 
 FIXTURES_FOLDER = 'fixtures'
 
@@ -27,11 +27,11 @@ def urls():
     return urls
 
 
-def test_url_to_filename(urls):
+def test_make_name(urls):
     http_url = urls['url']
     https_url = urls['url_s']
-    assert url_to_filename(http_url) == 'test-com.html'
-    assert url_to_filename(https_url) == 'site-test-com.html'
+    assert make_name(http_url, ".html") == 'test-com.html'
+    assert make_name(https_url, "_files") == 'site-test-com_files'
 
 
 def test_request(requests_mock):
