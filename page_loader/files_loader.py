@@ -15,20 +15,27 @@ def write_to_file(file_path: str, text: str):
 
 
 def files_download(url: str, temp_folder=""):
-    soup = BeautifulSoup(urlopen(url), 'html.parser')
-    files_urls = soup.find_all('a')
-    domain_name = urlparse(url).netloc
+    # директория и путь для хранения файлов
     dir_name = make_name(url, ext="_files")
     dir_path = os.path.join(temp_folder, dir_name)
+
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
-    # os.chdir(dir_name)
 
-    for file_url in files_urls:
-        if domain_name in (file_url, ""):
-            r = requests.get(file_url)
-            print(r)
-            with open(file_url, "wb") as file:
-                file.write(r.content)
-    #         print(link.get('href'))
-    # print(soup.prettify())
+    domain_name = urlparse(url).netloc
+
+    # все ссылки из url
+    soup = BeautifulSoup(urlopen(url), 'html.parser')
+    all_urls = soup.find_all('img')
+    # имя домена
+    domain_name = urlparse(url).netloc
+
+    for link in all_urls:
+        file_url = link.get('src')
+        if urlparse(file_url).netloc:
+            file_name = make_name(file_url, os.path.splitext(file_url)[1])
+            file_path = os.path.join(dir_path, file_name)
+
+            req = requests.get(file_url)
+            with open(file_path, "wb") as file:
+                file.write(req.content)
