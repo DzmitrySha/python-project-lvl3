@@ -12,27 +12,32 @@ def page_download(url: str, temp_folder=""):
     # директория и путь для хранения файлов
     dir_name = make_name(url, ext="_files")
     dir_path = os.path.join(temp_folder, dir_name)
-
+    # если директории не существует, то создаём её
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
     # создаем объект Beautifulsoup
     soup = make_soup(url)
-    # собираем все строки с тегом img из исходного url
+    # собираем все строки с тегом img из объекта soup (html файла)
     img_tags = soup.find_all('img')
 
     for tag in img_tags:
+        # из каждого тега img берём значение параметра src
         img_url = tag.get('src')
+        # если src содержит доменное имя, то скачиваем файл
         if urlparse(img_url).netloc:
-            file_name = make_name(img_url, os.path.splitext(img_url)[1])
-            html_file_path = os.path.join(dir_path, file_name)
+            # формируем имя файла
+            img_file_name = make_name(img_url, os.path.splitext(img_url)[1])
+            img_file_path = os.path.join(dir_path, img_file_name)
 
+            # берем и записываем контент, содержащийся в картинке в файл
             req = requests.get(img_url)
-            with open(html_file_path, "wb") as file:
+            with open(img_file_path, "wb") as file:
                 file.write(req.content)
 
+            # заменяем ссылки на локальные пути к файлам картинок
             for img in img_tags:
-                img['src'] = img['src'].replace(img_url, html_file_path)
+                img['src'] = img['src'].replace(img_url, img_file_path)
 
     # имя html-файла
     html_file_name = make_name(url, ext=".html")
