@@ -7,9 +7,9 @@ from urllib.parse import urlparse
 from urllib.request import urlopen
 
 
-def html_parser(url: str) -> tuple:
+def make_soup(url: str) -> BeautifulSoup:
     soup = BeautifulSoup(urlopen(url), 'html.parser')
-    return soup, soup.prettify()
+    return soup
 
 
 def clearing_(url: str) -> str:
