@@ -5,13 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from urllib.request import urlopen
-from page_loader.naming import make_name
-
-
-def write_to_file(file_path: str, text: str):
-    """Write text to file."""
-    with open(file_path, 'w') as file:
-        file.write(text)
+from page_loader.processes import make_name
 
 
 def files_download(url: str, temp_folder=""):
@@ -22,13 +16,11 @@ def files_download(url: str, temp_folder=""):
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
-    domain_name = urlparse(url).netloc
-
     # все ссылки из url
     soup = BeautifulSoup(urlopen(url), 'html.parser')
     all_urls = soup.find_all('img')
     # имя домена
-    domain_name = urlparse(url).netloc
+    # domain_name = urlparse(url).netloc
 
     for link in all_urls:
         file_url = link.get('src')

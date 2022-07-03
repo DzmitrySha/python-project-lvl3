@@ -6,5 +6,6 @@ This project: [https://github.com/DzmitrySha/python-project-lvl3]
 
 """
 
-from page_loader.html_loader import html_download       # noqa: F401
-from page_loader.files_loader import files_download     # noqa: F401
+from page_loader.html_loader import html_download           # noqa: F401
+from page_loader.files_loader import files_download         # noqa: F401
+from page_loader.processes import html_parser, make_name, write_to_file    # noqa: F401
