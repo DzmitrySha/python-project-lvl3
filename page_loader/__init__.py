@@ -6,6 +6,7 @@ This project: [https://github.com/DzmitrySha/python-project-lvl3]
 
 """
 
-from page_loader.downloader import page_download         # noqa: F401
+from page_loader.downloader import page_download          # noqa: F401
 from page_loader.processes import (make_soup, make_name,  # noqa: F401
-                                   write_to_file)           # noqa: F401
+                                   write_html_file,       # noqa: F401
+                                   write_bin_files)       # noqa: F401
