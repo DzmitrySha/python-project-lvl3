@@ -56,17 +56,20 @@ def write_html_file(soup: BeautifulSoup, url: str, temp_folder='') -> str:
 
 
 def write_bin_files(soup: BeautifulSoup,
+                    url: str,
                     tags: str,
                     attr: str,
                     dir_path: str):
     # собираем все строки с тегом img из объекта soup (html файла)
     source_tags = soup.find_all(tags)
+    domain = urlparse(url).netloc
 
     for tag in source_tags:
         # из каждого тега img берём значение параметра src
         source_url = tag.get(attr)
-        # если src содержит доменное имя, то скачиваем файл
-        if urlparse(source_url).netloc:
+        # если src содержит доменное имя или не содержит его вообще,
+        # то скачиваем файл
+        if domain in (urlparse(source_url).netloc, ""):
             # формируем имя файла
             source_name = make_name(source_url, os.path.splitext(source_url)[1])
             local_path = os.path.join(dir_path, source_name)
