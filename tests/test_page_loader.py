@@ -10,10 +10,10 @@ FIXTURES_FOLDER = 'fixtures'
 
 
 @pytest.fixture(autouse=True)
-def text_html():
+def html_after():
     """Return """
     result_path = os.path.join(os.path.dirname(__file__),
-                               FIXTURES_FOLDER, 'text_html')
+                               FIXTURES_FOLDER, 'html_after.html')
     with open(result_path) as file:
         return file.read()
 
@@ -38,6 +38,3 @@ def test_request(requests_mock):
     requests_mock.get('https://test.com', text='data')
     data = requests.get('https://test.com').text
     assert 'data' == data
-
-
-# def test_download(urls):
