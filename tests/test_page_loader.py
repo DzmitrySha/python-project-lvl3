@@ -13,7 +13,7 @@ FIXTURES_FOLDER = 'fixtures'
 def html_after():
     """Return """
     result_path = os.path.join(os.path.dirname(__file__),
-                               FIXTURES_FOLDER, 'html_after.html')
+                               FIXTURES_FOLDER, 'result.html')
     with open(result_path) as file:
         return file.read()
 
