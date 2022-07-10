@@ -3,7 +3,7 @@
 import os
 import re
 import requests
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
@@ -55,6 +55,14 @@ def write_html_file(soup: BeautifulSoup, url: str, temp_folder='') -> str:
     return html_file_path
 
 
+def write_source_file(source_url, local_path):
+    """Write source content to file"""
+    # считываем и записываем контент, содержащийся в картинке в файл
+    req = requests.get(source_url)
+    with open(local_path, "wb") as file:
+        file.write(req.content)
+
+
 def write_bin_files(soup: BeautifulSoup,
                     url: str,
                     tags: str,
@@ -62,22 +70,27 @@ def write_bin_files(soup: BeautifulSoup,
                     dir_path: str):
     # собираем все строки с тегом img из объекта soup (html файла)
     source_tags = soup.find_all(tags)
-    domain = urlparse(url).netloc
+    # выделяем из url доменное имя
+    domain_name = urlparse(url).netloc
 
     for tag in source_tags:
-        # из каждого тега img берём значение параметра src
+        # из каждого тега img берём аттрибут src
         source_url = tag.get(attr)
+        source_domain_name = urlparse(source_url).netloc
+
         # если src содержит доменное имя или не содержит его вообще,
         # то скачиваем файл
-        if domain in (urlparse(source_url).netloc, ""):
-            # формируем имя файла
+        if not source_domain_name or domain_name in source_domain_name:
+            # если ссылка на файл не содержит схему и доменное имя,
+            # добавляем их в ссылку
+            if not source_domain_name:
+                source_url = urljoin(url, source_url)
+
+            # формируем имя файла и локальный путь к нему
             source_name = make_name(source_url, os.path.splitext(source_url)[1])
             local_path = os.path.join(dir_path, source_name)
 
-            # берем и записываем контент, содержащийся в картинке в файл
-            req = requests.get(source_url)
-            with open(local_path, "wb") as file:
-                file.write(req.content)
+            write_source_file(source_url, local_path)
 
             # заменяем ссылки на локальные пути к файлам
             for source in source_tags:
