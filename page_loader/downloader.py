@@ -14,6 +14,8 @@ def page_download(url: str, temp_folder=""):
     soup = make_soup(url)
     # создаем объект Beautifulsoup
     write_bin_files(soup, url, "img", "src", dir_path)
+    write_bin_files(soup, url, "link", "href", dir_path)
+    # write_bin_files(soup, url, "script", "src", dir_path)
     html_file_path = write_html_file(soup, url, temp_folder)
 
     return html_file_path
