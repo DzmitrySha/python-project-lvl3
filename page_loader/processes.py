@@ -14,18 +14,36 @@ def make_soup(url: str) -> BeautifulSoup:
     return soup
 
 
+def clearing_url(url: str) -> str:
+    parsed_url = urlparse(url)
+    clear_url = parsed_url.netloc + parsed_url.path
+    return clear_url
+
+
 def make_name(url: str, ext='') -> str:
     """Make indent-name from url with specified extension."""
     indent = '-'
     mask = '[a-zA-Z0-9]'
-    parsed_url = urlparse(url)
-    clear_url = parsed_url.netloc + parsed_url.path
+    clear_url = clearing_url(url)
     extension = os.path.splitext(clear_url)[1]
     if extension == ext:
         clear_url = clear_url.replace(extension, '')
     name = "".join(char if re.match(mask, char) else indent
                    for char in clear_url)
     return name + ext if ext else name
+
+
+def make_html_file_path(html_file_name, temp_folder='') -> str:
+    """Make html file path"""
+    # html_file_name = make_name(url, ext=".html")
+    html_file_path = os.path.join(temp_folder, html_file_name)
+    return html_file_path
+
+
+def write_html_file(html_file_path, html_content):
+    """Write html-content to file"""
+    with open(html_file_path, 'w') as file:
+        file.write(html_content)
 
 
 def make_dir_path(url: str, temp_folder='') -> str:
@@ -43,25 +61,10 @@ def create_dir(dir_path: str):
         os.mkdir(dir_path)
 
 
-def make_html_file_path(url: str, temp_folder='') -> str:
-    """Make html file path"""
-    html_file_name = make_name(url, ext=".html")
-    html_file_path = os.path.join(temp_folder, html_file_name)
-    return html_file_path
-
-
-def write_html_file(soup: BeautifulSoup, html_file_path) -> str:
-    """Write html-content to file"""
-    with open(html_file_path, 'w') as file:
-        file.write(soup.prettify())
-    return html_file_path
-
-
-def write_bin_file(source_url, local_path):
+def write_bin_file(file_path, file_content):
     """Write binary source content to file"""
-    req = requests.get(source_url)
-    with open(local_path, "wb") as file:
-        file.write(req.content)
+    with open(file_path, "wb") as file:
+        file.write(file_content)
 
 
 def write_files(soup: BeautifulSoup,
@@ -69,17 +72,17 @@ def write_files(soup: BeautifulSoup,
                 tag: str,
                 attr: str,
                 dir_path: str):
-    # выделяем из url доменное имя
+    # доменное имя
     domain_name = urlparse(url).netloc
     # собираем список строк с тегами tags из объекта soup
     list_tags = soup.find_all(tag)
 
     for line in list_tags:
         # для каждой строки из списка берём значение его аттрибута
-        line_url = line.get(attr)
+        line_url = clearing_url(line.get(attr))
         line_domain_name = urlparse(line_url).netloc
 
-        # если src содержит доменное имя или не содержит его вообще,
+        # если ссылка на файл содержит доменное имя или не содержит его вообще,
         # то скачиваем файл
         if domain_name in line_domain_name or not line_domain_name:
             # формируем ссылку на файл, если она не содержит схему и домен
@@ -89,9 +92,10 @@ def write_files(soup: BeautifulSoup,
             # формируем имя файла и локальный путь к нему
             source_name = make_name(line_url, os.path.splitext(line_url)[1])
             local_path = os.path.join(dir_path, source_name)
+            content = requests.get(line_url).content
 
-            write_bin_file(line_url, local_path)
+            write_bin_file(local_path, content)
 
             # заменяем ссылки на локальные пути к файлам
-            # for source in list_tags:
-            line[attr] = line[attr].replace(line_url, local_path)
+            for source in list_tags:
+                source[attr] = source[attr].replace(line_url, local_path)

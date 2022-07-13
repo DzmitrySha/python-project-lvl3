@@ -3,7 +3,7 @@
 import os
 import pytest
 import requests
-from unittest.mock import Mock
+# from unittest.mock import Mock
 from page_loader.processes import make_name
 
 FIXTURES_FOLDER = 'fixtures'
