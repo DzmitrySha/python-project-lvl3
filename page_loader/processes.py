@@ -35,22 +35,14 @@ def make_name(url: str, ext='') -> str:
 
 def make_html_file_path(html_file_name, temp_folder='') -> str:
     """Make html file path"""
-    # html_file_name = make_name(url, ext=".html")
     html_file_path = os.path.join(temp_folder, html_file_name)
     return html_file_path
 
 
-def write_html_file(html_file_path, html_content):
+def write_txt_file(file_path, file_content):
     """Write html-content to file"""
-    with open(html_file_path, 'w') as file:
-        file.write(html_content)
-
-
-def make_dir_path(dir_name, temp_folder='') -> str:
-    """Make directory path"""
-    # dir_name = make_name(url, ext="_files")
-    dir_path = os.path.join(temp_folder, dir_name)
-    return dir_path
+    with open(file_path, 'w') as file:
+        file.write(file_content)
 
 
 def create_dir(dir_path: str):
@@ -65,35 +57,64 @@ def write_bin_file(file_path, file_content):
         file.write(file_content)
 
 
-def write_files(soup: BeautifulSoup,
-                url: str,
-                tag: str,
-                attr: str,
-                dir_path: str):
-    # доменное имя
+def get_content(soup, url: str, tag: str, attr: str, dir_path):
     domain_name = urlparse(url).netloc
-    # собираем список строк с тегами tags из объекта soup
     list_tags = soup.find_all(tag)
-
     for line in list_tags:
-        # для каждой строки из списка берём значение его аттрибута
         line_url = clearing_url(line.get(attr))
         line_domain_name = urlparse(line_url).netloc
 
-        # если ссылка на файл содержит доменное имя или не содержит его вообще,
-        # то скачиваем файл
         if domain_name in line_domain_name or not line_domain_name:
-            # формируем ссылку на файл, если она не содержит схему и домен
             if not line_domain_name:
                 line_url = urljoin(url, line_url)
-
-            # формируем имя файла и локальный путь к нему
             source_name = make_name(line_url, os.path.splitext(line_url)[1])
             local_path = os.path.join(dir_path, source_name)
-            content = requests.get(line_url).content
+            file_content = requests.get(line_url).content
 
-            write_bin_file(local_path, content)
+            write_bin_file(local_path, file_content)
 
-            # заменяем ссылки на локальные пути к файлам
             for source in list_tags:
                 source[attr] = source[attr].replace(line_url, local_path)
+
+
+# def make_dir_path(temp_folder, dir_name) -> str:
+#     """Make directory path"""
+#     dir_path = os.path.join(temp_folder, dir_name)
+#     return dir_path
+
+
+# def get_content(url: str,
+#                 tag: str,
+#                 attr: str,
+#                 dir_path: str):
+#
+#     soup = make_soup(url)
+#     domain_name = urlparse(url).netloc
+#
+#     # собираем список строк с тегами tags из объекта soup
+#     list_tags = soup.find_all(tag)
+#
+#     for line in list_tags:
+#         # для каждой строки из списка берём значение его аттрибута
+#         line_url = clearing_url(line.get(attr))
+#         line_domain_name = urlparse(line_url).netloc
+#
+#         # если ссылка на файл содержит доменное имя или не содержит вообще,
+#         # то скачиваем файл
+#         if domain_name in line_domain_name or not line_domain_name:
+#             # формируем ссылку на файл, если она не содержит схему и домен
+#             if not line_domain_name:
+#                 line_url = urljoin(url, line_url)
+#
+#             # формируем имя файла и локальный путь к нему
+#             source_name = make_name(line_url, os.path.splitext(line_url)[1])
+#             local_path = os.path.join(dir_path, source_name)
+#             content = requests.get(line_url).content
+#
+#             # write_bin_file(local_path, content)
+#
+#             # заменяем ссылки на локальные пути к файлам
+#             for source in list_tags:
+#                 source[attr] = source[attr].replace(line_url, local_path)
+#
+#             return local_path, content
