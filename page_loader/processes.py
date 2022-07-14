@@ -46,13 +46,11 @@ def write_html_file(html_file_path, html_content):
         file.write(html_content)
 
 
-def make_dir_path(url: str, temp_folder='') -> str:
+def make_dir_path(dir_name, temp_folder='') -> str:
     """Make directory path"""
-    dir_name = make_name(url, ext="_files")
-    if temp_folder:
-        dir_path = os.path.join(temp_folder, dir_name)
-        return dir_path
-    return dir_name
+    # dir_name = make_name(url, ext="_files")
+    dir_path = os.path.join(temp_folder, dir_name)
+    return dir_path
 
 
 def create_dir(dir_path: str):

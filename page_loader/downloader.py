@@ -19,7 +19,8 @@ def page_download(url: str, temp_folder=""):
     to exist specified folder"""
 
     soup = make_soup(url)
-    dir_path = make_dir_path(url, temp_folder)
+    dir_name = make_name(url, ext="_files")
+    dir_path = make_dir_path(dir_name, temp_folder)
     create_dir(dir_path)
     # находим, скачиваем и записываем ресурсы со страницы (по тегу и аттрибуту)
     for tag, attr in tags.items():
