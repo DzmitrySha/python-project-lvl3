@@ -15,6 +15,7 @@ def make_soup(url: str) -> BeautifulSoup:
 
 
 def clearing_url(url: str) -> str:
+    """Make URL clean, cut scheme and query"""
     parsed_url = urlparse(url)
     clear_url = parsed_url.netloc + parsed_url.path
     return clear_url
@@ -31,12 +32,6 @@ def make_name(url: str, ext='') -> str:
     name = "".join(char if re.match(mask, char) else indent
                    for char in clear_url)
     return name + ext if ext else name
-
-
-def make_html_file_path(html_file_name, temp_folder='') -> str:
-    """Make html file path"""
-    html_file_path = os.path.join(temp_folder, html_file_name)
-    return html_file_path
 
 
 def write_txt_file(file_path, file_content):
@@ -57,64 +52,32 @@ def write_bin_file(file_path, file_content):
         file.write(file_content)
 
 
-def get_content(soup, url: str, tag: str, attr: str, dir_path):
+def has_scheme(url: str) -> bool:
+    if urlparse(url).scheme:
+        return True
+    return False
+
+
+def get_content(soup, url: str, tag: str, attr: str, dir_name, dir_path):
     domain_name = urlparse(url).netloc
-    list_tags = soup.find_all(tag)
-    for line in list_tags:
-        line_url = clearing_url(line.get(attr))
-        line_domain_name = urlparse(line_url).netloc
+    list_soup_tags = soup.find_all(tag)
+    for src in list_soup_tags:
+        if src is not None:
+            src_url = src.get(attr)
+            src_url_parse = urlparse(src_url)
+            src_domain_name = str(src_url_parse.netloc)
 
-        if domain_name in line_domain_name or not line_domain_name:
-            if not line_domain_name:
-                line_url = urljoin(url, line_url)
-            source_name = make_name(line_url, os.path.splitext(line_url)[1])
-            local_path = os.path.join(dir_path, source_name)
-            file_content = requests.get(line_url).content
+            if domain_name in src_domain_name or not src_domain_name:
+                if not src_domain_name:
+                    src_url = urljoin(url, clearing_url(src_url))
 
-            write_bin_file(local_path, file_content)
+                src_name = make_name(src_url, os.path.splitext(src_url)[1])
+                src_local_url = os.path.join(dir_name, src_name)
+                src_local_path = os.path.join(dir_path, src_name)
+                src_content = requests.get(src_url).content
 
-            for source in list_tags:
-                source[attr] = source[attr].replace(line_url, local_path)
+                write_bin_file(src_local_path, src_content)
 
-
-# def make_dir_path(temp_folder, dir_name) -> str:
-#     """Make directory path"""
-#     dir_path = os.path.join(temp_folder, dir_name)
-#     return dir_path
-
-
-# def get_content(url: str,
-#                 tag: str,
-#                 attr: str,
-#                 dir_path: str):
-#
-#     soup = make_soup(url)
-#     domain_name = urlparse(url).netloc
-#
-#     # собираем список строк с тегами tags из объекта soup
-#     list_tags = soup.find_all(tag)
-#
-#     for line in list_tags:
-#         # для каждой строки из списка берём значение его аттрибута
-#         line_url = clearing_url(line.get(attr))
-#         line_domain_name = urlparse(line_url).netloc
-#
-#         # если ссылка на файл содержит доменное имя или не содержит вообще,
-#         # то скачиваем файл
-#         if domain_name in line_domain_name or not line_domain_name:
-#             # формируем ссылку на файл, если она не содержит схему и домен
-#             if not line_domain_name:
-#                 line_url = urljoin(url, line_url)
-#
-#             # формируем имя файла и локальный путь к нему
-#             source_name = make_name(line_url, os.path.splitext(line_url)[1])
-#             local_path = os.path.join(dir_path, source_name)
-#             content = requests.get(line_url).content
-#
-#             # write_bin_file(local_path, content)
-#
-#             # заменяем ссылки на локальные пути к файлам
-#             for source in list_tags:
-#                 source[attr] = source[attr].replace(line_url, local_path)
-#
-#             return local_path, content
+                print(src)
+                src[attr] = src[attr].replace(src.get(attr), src_local_url)
+                print(src)
