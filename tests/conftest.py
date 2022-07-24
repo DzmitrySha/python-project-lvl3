@@ -34,24 +34,27 @@ def jpg_file():
 
 
 @pytest.fixture(scope="session")
-def urls():
-    urls = {
-        'url': 'http://test.com',
-        'url_s': 'https://site/test.com',
-    }
-    return urls
+def css_file():
+    return os.path.join(os.path.dirname(__file__),
+                        FIXTURES_FOLDER, 'style.css')
 
 
 @pytest.fixture(scope="session")
-def mocks():
+def js_file():
+    return os.path.join(os.path.dirname(__file__),
+                        FIXTURES_FOLDER, 'script.js')
+
+
+@pytest.fixture(scope="session")
+def urls():
     mock = Mock()
-    mock.url = ""
-    # mock.data =
-    mocks = {
-        'url': mock.url,
-        'data': mock.data,
+    mock.url = "https://ru.hexlet.io"
+    urls = {
+        'url': 'http://test.com',
+        'url_s': 'https://site/test.com',
+        'mock_url': mock.url,
     }
-    return mocks
+    return urls
 
 
 @pytest.fixture(scope="function")
