@@ -4,7 +4,7 @@ import os
 import pytest
 import requests
 import tempfile
-# from unittest.mock import Mock
+from bs4 import BeautifulSoup
 from page_loader.processes import make_name, has_scheme, make_soup, create_dir
 
 DOWNLOADER = 'processes'
@@ -25,11 +25,10 @@ async def test_has_scheme(urls):
     assert not has_scheme("/test.com/test")
 
 
-# @pytest.mark.asyncio
-# async def test_make_soup(before_html):
-#     mock = Mock()
-#     mock.file =
-#     assert result_render == make_soup(before_html).prettify()
+@pytest.mark.asyncio
+async def test_make_soup(before_html, urls):
+    soup = make_soup(urls['mock_url'])
+    assert type(soup) == BeautifulSoup
 
 
 @pytest.mark.asyncio
