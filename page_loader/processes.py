@@ -58,7 +58,8 @@ def has_scheme(url: str) -> bool:
     return False
 
 
-def get_content(soup, url: str, tag: str, attr: str, dir_name, dir_path):
+def get_content(soup, url: str, tag: str, attr: str,
+                dir_name: str, dir_path: str):
     domain_name = urlparse(url).netloc
     list_soup_tags = soup.find_all(tag)
     for src in list_soup_tags:
