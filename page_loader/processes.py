@@ -79,6 +79,6 @@ def get_content(soup, url: str, tag: str, attr: str,
 
                 write_bin_file(src_local_path, src_content)
 
-                print(src)
+                # print(src)
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
-                print(src)
+                # print(src)
