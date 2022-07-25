@@ -33,3 +33,7 @@
 Скачивание html страницы по указанному url:
 
 [![asciicast](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO.svg)](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO)
+
+Скачивание html и ресурсов страницы по указанному url:
+
+[![asciicast](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh.svg)](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh)
