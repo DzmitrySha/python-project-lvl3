@@ -18,9 +18,12 @@ def page_download(url: str, temp_folder=""):
 
     soup = make_soup(url)
     html_file_path = html_download(soup, url, temp_folder)
+
     logger.info(f"write html file: {html_file_path}")
     logger.info(f"Downloading: ...")
 
     sources_download(soup, url, temp_folder)
 
-    return f"Page was downloaded as: {html_file_path}"
+    logger.info(f"Page was downloaded as: {html_file_path}")
+
+    return html_file_path
