@@ -8,7 +8,7 @@ from page_loader.cli import parse_args_
 def main():
     """Get start here."""
     source_url, output = parse_args_()
-    print(page_download(source_url, output))
+    page_download(source_url, output)
 
 
 if __name__ == '__main__':
