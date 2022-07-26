@@ -4,8 +4,9 @@ import os
 import logging
 from page_loader.processes import create_dir
 
-_log_file_format = f"%(asctime)s [%(levelname)s]: (%(filename)s) - %(funcName)s(%(lineno)d) - %(message)s"
-_log_stream_format = f"[%(levelname)s]: %(message)s"
+_log_file_format = "%(asctime)s [%(levelname)s]: " \
+                   "(%(filename)s) - %(funcName)s(%(lineno)d) - %(message)s"
+_log_stream_format = "[%(levelname)s]: %(message)s"
 
 
 def get_file_handler():

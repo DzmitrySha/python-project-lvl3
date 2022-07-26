@@ -20,7 +20,7 @@ def page_download(url: str, temp_folder=""):
     html_file_path = html_download(soup, url, temp_folder)
 
     logger.info(f"write html file: {html_file_path}")
-    logger.info(f"Downloading: ...")
+    logger.info("Downloading: ...")
 
     sources_download(soup, url, temp_folder)
 
