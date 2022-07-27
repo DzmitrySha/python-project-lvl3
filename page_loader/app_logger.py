@@ -24,9 +24,24 @@ def get_stream_handler():
     return stream_handler
 
 
+def get_file_test_handler():
+    create_dir(os.path.join(os.getcwd(), 'logs'))
+    file_handler = logging.FileHandler("logs/test_logs.log")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(logging.Formatter(_log_file_format))
+    return file_handler
+
+
 def get_logger(name):
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     logger.addHandler(get_stream_handler())
     logger.addHandler(get_file_handler())
+    return logger
+
+
+def get_test_logger(name):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(get_file_test_handler())
     return logger
