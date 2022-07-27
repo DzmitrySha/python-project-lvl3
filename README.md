@@ -34,6 +34,10 @@
 
 [![asciicast](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO.svg)](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO)
 
-Скачивание html и ресурсов страницы по указанному url:
+Скачивание html + ресурсов по указанному url:
 
 [![asciicast](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh.svg)](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh)
+
+Работа программы + логирование:
+
+[![asciicast](https://asciinema.org/a/mWjoiaKEonFeBfFkTq3lZOIDU.svg)](https://asciinema.org/a/mWjoiaKEonFeBfFkTq3lZOIDU)
