@@ -16,9 +16,9 @@ def is_url_response(url: str):
     try:
         response = requests.get(url)
         response.raise_for_status()
-    except requests.exceptions.ConnectionError as error:
+    except requests.exceptions.ConnectionError:
         logger.error('URL is not correct!')
-        sys.exit('Exit code: 64')
+        sys.exit('Exit code: 42')
     return True
 
 
@@ -26,7 +26,7 @@ def is_folder_exists(folder: str) -> bool:
     if not os.path.exists(folder):
         logger.error('Output directory does not exist! '
                      'Please, create it before!')
-        sys.exit('Exit code: 64')
+        sys.exit('Exit code: 42')
     return True
 
 
