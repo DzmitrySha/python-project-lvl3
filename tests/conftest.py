@@ -57,12 +57,12 @@ def urls():
     return urls
 
 
-@pytest.fixture(scope="function")
-async def result_render(request):
-    assert getattr(request.module, 'DOWNLOADER', None)
-
-    result_path = os.path.join(os.path.dirname(__file__),
-                               FIXTURES_FOLDER, request.module.DOWNLOADER)
-
-    with open(result_path) as file:
-        return file.read()
+# @pytest.fixture(scope="function")
+# async def result_render(request):
+#     assert getattr(request.module, 'DOWNLOADER', None)
+#
+#     result_path = os.path.join(os.path.dirname(__file__),
+#                                FIXTURES_FOLDER, request.module.DOWNLOADER)
+#
+#     with open(result_path) as file:
+#         return file.read()
