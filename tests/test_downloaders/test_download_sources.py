@@ -9,20 +9,20 @@ from page_loader.download_sources import sources_download
 DOWNLOADER = 'download_sources'
 
 
+def read_file(path: str, flag='r'):
+    with open(path, flag) as file:
+        return file.read()
+
+
 @pytest.mark.asyncio
 async def test_sources_download(before_html, jpg_file,
                                 css_file, js_file,
                                 requests_mock):
 
-    with open(before_html, 'r') as file:
-        soup = BeautifulSoup(file, "html.parser")
-
-    with open(jpg_file, 'rb') as file:
-        jpg_mock = file.read()
-    with open(css_file, 'r') as file:
-        css_mock = file.read()
-    with open(js_file, 'rb') as file:
-        js_mock = file.read()
+    soup = BeautifulSoup(read_file(before_html), "html.parser")
+    jpg_mock = read_file(jpg_file, 'rb')
+    css_mock = read_file(css_file)
+    js_mock = read_file(js_file, 'rb')
 
     requests_mock.get(
         "https://ru.hexlet.io/assets/professions/python.jpg", content=jpg_mock)
@@ -41,22 +41,21 @@ async def test_sources_download(before_html, jpg_file,
 
     requests_mock.get(
         "https://ru.hexlet.io/courses", text=before_html)
-
+    html_mock = requests.get("https://ru.hexlet.io/courses", before_html).text
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        path_to_file = sources_download(
+        sources_download(
             soup=soup,
             url="https://ru.hexlet.io/courses",
             temp_folder=tmpdirname
         )
 
-        # with open(path_to_file, 'rb') as file:
-        #     jpg_after_func = file.read()
-        # with open(path_to_file, 'rb') as file:
-        #     css_after_func = file.read()
-        # with open(path_to_file, 'rb') as file:
-        #     js_after_func = file.read()
-        #
+        # assert os.path.exists(jpg_mock)
+        # assert os.path.exists(css_mock)
+        # assert os.path.exists(js_mock)
+        # assert os.path.exists(html_mock)
+
+
         # assert jpg_mock == jpg_after_func
         # assert css_mock == css_after_func
         # assert js_mock == js_after_func

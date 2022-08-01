@@ -5,7 +5,7 @@ import pytest
 import requests
 import tempfile
 from bs4 import BeautifulSoup
-from page_loader.processes import make_name, has_scheme, make_soup, create_dir
+from page_loader.processes import make_name, make_soup, create_dir
 
 DOWNLOADER = 'processes'
 
@@ -16,13 +16,6 @@ async def test_make_name(urls):
     https_url = urls['url_s']
     assert make_name(http_url, ".html") == 'test-com.html'
     assert make_name(https_url, "_files") == 'site-test-com_files'
-
-
-@pytest.mark.asyncio
-async def test_has_scheme(urls):
-    assert has_scheme(urls['url'])
-    assert has_scheme(urls['url_s'])
-    assert not has_scheme("/test.com/test")
 
 
 @pytest.mark.asyncio
