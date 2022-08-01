@@ -1,7 +1,7 @@
 """IMG downloader module."""
 
 import os
-from page_loader.processes import (make_name, create_dir, get_content)
+from page_loader.processes import (make_name, create_dir, get_sources)
 
 tags = {
     "img": "src",
@@ -11,9 +11,9 @@ tags = {
 
 
 def sources_download(soup, url: str, temp_folder=''):
-    dir_name = make_name(url, ext="_files")
-    dir_path = os.path.join(temp_folder, dir_name)
-    create_dir(dir_path)
+    folder_name = make_name(url, ext="_files")
+    folder_path = os.path.join(temp_folder, folder_name)
+    create_dir(folder_path)
 
     for tag, attr in tags.items():
-        get_content(soup, url, tag, attr, dir_name, dir_path)
+        get_sources(soup, url, tag, attr, folder_name, folder_path)
