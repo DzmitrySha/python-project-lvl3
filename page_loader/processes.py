@@ -1,17 +1,40 @@
 """Processes module."""
 
 import os
-import re
+import sys
 import requests
-from urllib.parse import urlparse, urljoin
+import re
 from urllib.request import urlopen
+from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup
+from page_loader import app_logger
+
+logger = app_logger.get_logger(__name__)
+
+
+def is_url_response(url: str):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.exceptions.ConnectionError as error:
+        logger.error('URL is not correct!')
+        sys.exit('Exit code: 64')
+    return True
+
+
+def is_folder_exists(folder: str) -> bool:
+    if not os.path.exists(folder):
+        logger.error('Output directory does not exist! '
+                     'Please, create it before!')
+        sys.exit('Exit code: 64')
+    return True
 
 
 def make_soup(url: str) -> BeautifulSoup:
     """Make soup object from url"""
-    soup = BeautifulSoup(urlopen(url), 'html.parser')
-    return soup
+    if is_url_response(url):
+        soup = BeautifulSoup(urlopen(url), 'html.parser')
+        return soup
 
 
 def clearing_url(url: str) -> str:
@@ -52,21 +75,14 @@ def write_bin_file(file_path, file_content):
         file.write(file_content)
 
 
-def has_scheme(url: str) -> bool:
-    if urlparse(url).scheme:
-        return True
-    return False
-
-
-def get_content(soup, url: str, tag: str, attr: str,
+def get_sources(soup, url: str, tag: str, attr: str,
                 dir_name: str, dir_path: str):
     domain_name = urlparse(url).netloc
     list_soup_tags = soup.find_all(tag)
     for src in list_soup_tags:
-        if src is not None:
+        if src:
             src_url = src.get(attr)
-            src_url_parse = urlparse(src_url)
-            src_domain_name = str(src_url_parse.netloc)
+            src_domain_name = str(urlparse(src_url).netloc)
 
             if domain_name in src_domain_name or not src_domain_name:
                 if not src_domain_name:
@@ -79,6 +95,4 @@ def get_content(soup, url: str, tag: str, attr: str,
 
                 write_bin_file(src_local_path, src_content)
 
-                # print(src)
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
-                # print(src)
