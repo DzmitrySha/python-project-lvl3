@@ -1,4 +1,4 @@
-# Загрузчик страниц
+# Page Loader
 
 [![Actions Status](https://github.com/DzmitrySha/python-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/DzmitrySha/python-project-lvl3/actions)
 [![workflow](https://github.com/DzmitrySha/python-project-lvl3/actions/workflows/pyci.yml/badge.svg)](https://github.com/DzmitrySha/python-project-lvl3/actions/workflows/pyci.yml)
@@ -8,36 +8,40 @@
 
 ---
 
-## Инструкции
+## Instructions
 
-**Запуск справки:**
+**Run help:**
 
 `page-loader -h`
 
-**Запуск скрипта c настройками по-умолчанию (сохранение в текущую папку):** 
+**Run script with default settings (save in current folder):** 
 
 `page-loader <source_url>`
 
-**Запуск скрипта с выбором папки для сохранения файлов:** 
+**Run script with user settings (save in exists output specified folder):** 
 
 `page-loader --output <exist_folder_path> <source_url>`
 
-или
+or
 
 `page-loader -o <exist_folder_path> <source_url> `
 
 ---
 
-## Примеры работы программы "Загрузчик страниц":
+## Examples of using "Page Loader" (asciinems):
 
-Скачивание html страницы по указанному url:
+Download html page:
 
 [![asciicast](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO.svg)](https://asciinema.org/a/2xylreHjfyIbefJaaQrqz6dMO)
 
-Скачивание html + ресурсов по указанному url:
+Download html page + resources:
 
 [![asciicast](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh.svg)](https://asciinema.org/a/zpoEkgTPWprl9v2Jwqgdxgsjh)
 
-Работа программы + логирование:
+Download html page + resources (with logging):
 
 [![asciicast](https://asciinema.org/a/mWjoiaKEonFeBfFkTq3lZOIDU.svg)](https://asciinema.org/a/mWjoiaKEonFeBfFkTq3lZOIDU)
+
+Logging errors:
+
+[![asciicast](https://asciinema.org/a/I280X2RrvKKTkjDgWh5EwnmQy.svg)](https://asciinema.org/a/I280X2RrvKKTkjDgWh5EwnmQy)
