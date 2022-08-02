@@ -2,7 +2,7 @@
 
 import os
 from page_loader import app_logger
-from page_loader.processes import make_soup, write_txt_file
+from page_loader.processes import make_soup, write_to_file
 from page_loader.download_sources import sources_download
 from page_loader.download_html import html_download
 
@@ -22,7 +22,7 @@ def page_download(url: str, temp_folder=""):
     logger.info(f"write html file: {html_file_path}")
     logger.info("Downloading: ...")
     sources_download(soup, url, temp_folder)
-    write_txt_file(html_file_path, soup.prettify())
+    write_to_file(html_file_path, soup.prettify())
 
     logger.info(f"Page was downloaded as: {html_file_path}")
 

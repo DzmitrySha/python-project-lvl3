@@ -12,7 +12,7 @@ from page_loader import app_logger
 logger = app_logger.get_logger(__name__)
 
 
-def is_url_response(url: str):
+def is_url_correct(url: str):
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -32,7 +32,7 @@ def is_folder_exists(folder: str) -> bool:
 
 def make_soup(url: str) -> BeautifulSoup:
     """Make soup object from url"""
-    if is_url_response(url):
+    if is_url_correct(url):
         soup = BeautifulSoup(urlopen(url), 'html.parser')
         return soup
 
@@ -57,21 +57,16 @@ def make_name(url: str, ext='') -> str:
     return name + ext if ext else name
 
 
-def write_txt_file(file_path, file_content):
-    """Write html-content to file"""
-    with open(file_path, 'w') as file:
-        file.write(file_content)
-
-
 def create_dir(dir_path: str):
     """Create directory if it not exists"""
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
 
 
-def write_bin_file(file_path, file_content):
+def write_to_file(file_path, file_content):
     """Write binary source content to file"""
-    with open(file_path, "wb") as file:
+    fmt = 'wb' if isinstance(file_content, bytes) else 'w'
+    with open(file_path, fmt) as file:
         file.write(file_content)
 
 
@@ -93,6 +88,6 @@ def get_sources(soup, url: str, tag: str, attr: str,
                 src_local_path = os.path.join(dir_path, src_name)
                 src_content = requests.get(src_url).content
 
-                write_bin_file(src_local_path, src_content)
+                write_to_file(src_local_path, src_content)
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
