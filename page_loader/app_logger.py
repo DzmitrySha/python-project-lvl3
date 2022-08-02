@@ -4,7 +4,7 @@ import logging
 
 _log_file_format = "%(asctime)s [%(levelname)s]: " \
                    "(%(filename)s) - %(funcName)s(%(lineno)d) - %(message)s"
-_log_stream_format = "[%(levelname)s]: (%(filename)s.%(funcName)s): %(message)s"
+_log_stream_format = "[%(levelname)s]: %(message)s"
 
 
 def get_file_handler():

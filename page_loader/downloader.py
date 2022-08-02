@@ -14,16 +14,17 @@ def page_download(url: str, temp_folder=""):
     with local resources
     to exist specified folder"""
     logger.info(f"requested url: {url}")
-    logger.info(f"output path: {os.path.join(os.getcwd(), temp_folder)}")
-
     soup = make_soup(url)
+
+    output_path = os.path.join(os.getcwd(), temp_folder)
+    logger.info(f"output path: {output_path}")
     html_file_path = html_download(soup, url, temp_folder)
 
     logger.info(f"write html file: {html_file_path}")
-    logger.info("Downloading: ...")
+    logger.info("downloading: ...")
     sources_download(soup, url, temp_folder)
     write_to_file(html_file_path, soup.prettify())
 
-    logger.info(f"Page was downloaded as: {html_file_path}")
+    logger.info(f"page was downloaded as: {html_file_path}")
 
     return html_file_path
