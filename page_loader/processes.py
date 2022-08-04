@@ -7,6 +7,7 @@ import re
 from urllib.request import urlopen
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup
+from progress.bar import ChargingBar
 from page_loader import app_logger
 
 logger = app_logger.get_logger(__name__)
@@ -81,6 +82,7 @@ def get_sources(soup, url: str, tag: str, attr: str,
 
             if domain_name in src_domain_name or not src_domain_name:
                 if not src_domain_name:
+
                     src_url = urljoin(url, clearing_url(src_url))
 
                 src_name = make_name(src_url, os.path.splitext(src_url)[1])
@@ -88,6 +90,12 @@ def get_sources(soup, url: str, tag: str, attr: str,
                 src_local_path = os.path.join(dir_path, src_name)
                 src_content = requests.get(src_url).content
 
+                bar = ChargingBar('Processing', max=100)
+                logger.info(f" source url: {src_url}")
+                for i in range(100):
+                    bar.next()
                 write_to_file(src_local_path, src_content)
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
+
+                bar.finish()
