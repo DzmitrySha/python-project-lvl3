@@ -45,3 +45,7 @@ Download html page + resources (with logging):
 Logging errors:
 
 [![asciicast](https://asciinema.org/a/I280X2RrvKKTkjDgWh5EwnmQy.svg)](https://asciinema.org/a/I280X2RrvKKTkjDgWh5EwnmQy)
+
+Downloading with ChargingBars:
+
+[![asciicast](https://asciinema.org/a/Nf6KUo9iJZVQqegg77HP7py0C.svg)](https://asciinema.org/a/Nf6KUo9iJZVQqegg77HP7py0C)
