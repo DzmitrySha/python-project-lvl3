@@ -23,8 +23,8 @@ def is_url_correct(url: str):
     return True
 
 
-def is_folder_exists(folder: str) -> bool:
-    if not os.path.exists(folder):
+def is_folder_exists(folder_path: str) -> bool:
+    if not os.path.exists(folder_path):
         logger.error('the output folder does not exist! '
                      'Please, create it before!')
         sys.exit(1)
