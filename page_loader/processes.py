@@ -23,8 +23,8 @@ def is_url_correct(url: str):
     return True
 
 
-def is_folder_exists(folder: str) -> bool:
-    if not os.path.exists(folder):
+def is_folder_exists(folder_path: str) -> bool:
+    if not os.path.exists(folder_path):
         logger.error('the output folder does not exist! '
                      'Please, create it before!')
         sys.exit(1)
@@ -73,6 +73,7 @@ def write_to_file(file_path, file_content):
 
 def get_sources(soup, url: str, tag: str, attr: str,
                 dir_name: str, dir_path: str):
+    """Get sources from HTML page"""
     domain_name = urlparse(url).netloc
     list_soup_tags = soup.find_all(tag)
     for src in list_soup_tags:

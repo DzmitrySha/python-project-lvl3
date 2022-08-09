@@ -1,4 +1,4 @@
-"""IMG downloader module."""
+"""Sources downloader module."""
 
 import os
 from page_loader.processes import (make_name, create_dir, get_sources)
