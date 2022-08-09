@@ -6,7 +6,7 @@ import tempfile
 from bs4 import BeautifulSoup
 from page_loader.download_sources import sources_download
 
-DOWNLOADER = 'download_sources'
+# DOWNLOADER = 'download_sources'
 
 
 def read_file(path: str, flag='r'):

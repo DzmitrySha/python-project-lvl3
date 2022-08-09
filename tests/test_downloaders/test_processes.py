@@ -5,9 +5,29 @@ import pytest
 import requests
 import tempfile
 from bs4 import BeautifulSoup
-from page_loader.processes import make_name, make_soup, create_dir
+from page_loader.processes import (make_name, make_soup,
+                                   create_dir, is_url_correct,
+                                   is_folder_exists)
 
-DOWNLOADER = 'processes'
+# DOWNLOADER = 'processes'
+
+
+@pytest.mark.asyncio
+async def test_is_url_correct(urls, requests_mock):
+    requests_mock.get(urls['url'], text='True')
+    assert is_url_correct(urls['url']) is True
+
+
+@pytest.mark.asyncio
+async def test_is_folder_exists():
+    folder_path = os.getcwd()
+    assert is_folder_exists(folder_path) is True
+
+
+@pytest.mark.asyncio
+async def test_make_soup(before_html, urls):
+    soup = make_soup(urls['mock_url'])
+    assert type(soup) == BeautifulSoup
 
 
 @pytest.mark.asyncio
@@ -19,12 +39,6 @@ async def test_make_name(urls):
 
 
 @pytest.mark.asyncio
-async def test_make_soup(before_html, urls):
-    soup = make_soup(urls['mock_url'])
-    assert type(soup) == BeautifulSoup
-
-
-@pytest.mark.asyncio
 async def test_create_dir():
     with tempfile.TemporaryDirectory() as tempdir:
         create_dir(tempdir)
@@ -33,7 +47,7 @@ async def test_create_dir():
 
 
 @pytest.mark.asyncio
-async def test_request(requests_mock):
-    requests_mock.get('https://test.com', text='data')
-    data = requests.get('https://test.com').text
+async def test_request(urls, requests_mock):
+    requests_mock.get(urls['url'], text='data')
+    data = requests.get(urls['url']).text
     assert 'data' == data
