@@ -9,7 +9,7 @@ from page_loader.download_html import html_download
 logger = app_logger.get_logger(__name__)
 
 
-def page_download(url: str, temp_folder=""):
+def download(url: str, temp_folder=""):
     """Downloads and saves html page
     with local resources
     to exist specified folder"""
