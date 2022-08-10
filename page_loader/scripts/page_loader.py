@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Page Loader Script."""
 
-from page_loader.downloader import page_download
+from page_loader.download import page_download
 from page_loader.cli import parse_args_
 
 
