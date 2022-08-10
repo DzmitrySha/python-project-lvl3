@@ -17,9 +17,9 @@ def is_url_correct(url: str):
     try:
         response = requests.get(url)
         response.raise_for_status()
-    except requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError as error:
         logger.error('requested url is not correct!')
-        sys.exit(1)
+        sys.exit(error)
     return True
 
 
@@ -27,7 +27,7 @@ def is_folder_exists(folder_path: str) -> bool:
     if not os.path.exists(folder_path):
         logger.error('the output folder does not exist! '
                      'Please, create it before!')
-        sys.exit(1)
+        sys.exit(2)
     return True
 
 
@@ -39,7 +39,7 @@ def make_soup(url: str) -> BeautifulSoup:
 
 
 def clearing_url(url: str) -> str:
-    """Make URL clean, cut scheme and query"""
+    """Cut scheme and query from url"""
     parsed_url = urlparse(url)
     clear_url = parsed_url.netloc + parsed_url.path
     return clear_url
