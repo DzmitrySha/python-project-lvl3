@@ -17,9 +17,9 @@ def is_url_correct(url: str):
     try:
         response = requests.get(url)
         response.raise_for_status()
-    except requests.exceptions.ConnectionError as error:
+    except requests.exceptions.ConnectionError:
         logger.error('requested url is not correct!')
-        sys.exit(error)
+        sys.exit(2)
     return True
 
 
