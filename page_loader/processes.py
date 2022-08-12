@@ -1,7 +1,7 @@
 """Processes module."""
 
 import os
-import sys
+# import sys
 import requests
 import re
 from urllib.request import urlopen
@@ -16,7 +16,7 @@ logger = app_logger.get_logger(__name__)
 def is_url_correct(url: str):
     try:
         requests.get(url)
-    except requests.exceptions.RequestException:
+    except requests.exceptions.RequestException as error:
         logger.error('requested url is not correct!')
     # except (requests.exceptions.MissingSchema,
     #         requests.exceptions.InvalidSchema,
@@ -24,15 +24,18 @@ def is_url_correct(url: str):
     #         requests.exceptions.HTTPError,
     #         requests.exceptions.ConnectionError
     #         ):
-        return False
+        raise error
     return True
 
 
 def is_folder_exists(folder_path: str) -> bool:
-    if not os.path.exists(folder_path):
+    try:
+        not os.path.exists(folder_path)
+    except OSError as error:
         logger.error('the output folder does not exist! '
                      'Please, create it before!')
-        sys.exit(1)
+        raise error
+        # sys.exit(1)
     return True
 
 
@@ -96,13 +99,11 @@ def get_sources(soup, url: str, tag: str, attr: str,
                 src_local_path = os.path.join(dir_path, src_name)
                 src_content = requests.get(src_url).content
 
-                bar = ChargingBar('Processing', max=100)
-                logger.info(f" -- source url: {src_url}")
-                for i in range(100):
-                    bar.next()
+                bar = ChargingBar('progress: ', min=0, max=1)
+                logger.info(f"source url: {src_url}")
+                bar.next()
                 write_to_file(src_local_path, src_content)
-                logger.debug(f"{src_url} - successfully uploaded")
+                logger.debug(" - successfully downloaded")
+                bar.finish()
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
-
-                bar.finish()
