@@ -15,11 +15,10 @@ logger = app_logger.get_logger(__name__)
 
 def is_url_correct(url: str):
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-    except requests.exceptions.ConnectionError:
+        requests.get(url)
+    except requests.exceptions.RequestException as err:
         logger.error('requested url is not correct!')
-        sys.exit(2)
+        sys.exit(err)
     return True
 
 
@@ -27,7 +26,7 @@ def is_folder_exists(folder_path: str) -> bool:
     if not os.path.exists(folder_path):
         logger.error('the output folder does not exist! '
                      'Please, create it before!')
-        sys.exit(2)
+        sys.exit(1)
     return True
 
 
