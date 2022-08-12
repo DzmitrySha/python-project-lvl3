@@ -16,9 +16,9 @@ logger = app_logger.get_logger(__name__)
 def is_url_correct(url: str):
     try:
         requests.get(url)
-    except requests.exceptions.RequestException as err:
+    except requests.exceptions.RequestException:
         logger.error('requested url is not correct!')
-        sys.exit(err)
+        sys.exit(1)
     return True
 
 
