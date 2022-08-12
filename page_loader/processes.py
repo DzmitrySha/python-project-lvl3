@@ -28,12 +28,13 @@ def is_url_correct(url: str):
     except requests.exceptions.InvalidURL:
         logger.error('requested url is not correct!')
         sys.exit(1)
-    except requests.exceptions.ConnectionError:
-        logger.error('requested url is not correct!')
-        sys.exit(1)
     except requests.exceptions.HTTPError:
         logger.error('requested url is not correct!')
         sys.exit(1)
+    except requests.exceptions.ConnectionError:
+        logger.error('requested url is not correct!')
+        sys.exit(1)
+
     return True
 
 
@@ -106,10 +107,11 @@ def get_sources(soup, url: str, tag: str, attr: str,
                 src_content = requests.get(src_url).content
 
                 bar = ChargingBar('Processing', max=100)
-                logger.info(f" source url: {src_url}")
+                logger.info(f" -- source url: {src_url}")
                 for i in range(100):
                     bar.next()
                 write_to_file(src_local_path, src_content)
+                logger.debug(f"{src_url} - successfully uploaded")
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
 
