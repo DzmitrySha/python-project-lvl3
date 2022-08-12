@@ -16,25 +16,15 @@ logger = app_logger.get_logger(__name__)
 def is_url_correct(url: str):
     try:
         requests.get(url)
-    # except requests.exceptions.RequestException:
-    #     logger.error('requested url is not correct!')
-    #     sys.exit(1)
-    except requests.exceptions.MissingSchema:
+    except requests.exceptions.RequestException:
         logger.error('requested url is not correct!')
-        sys.exit(1)
-    except requests.exceptions.InvalidSchema:
-        logger.error('requested url is not correct!')
-        sys.exit(1)
-    except requests.exceptions.InvalidURL:
-        logger.error('requested url is not correct!')
-        sys.exit(1)
-    except requests.exceptions.HTTPError:
-        logger.error('requested url is not correct!')
-        sys.exit(1)
-    except requests.exceptions.ConnectionError:
-        logger.error('requested url is not correct!')
-        sys.exit(1)
-
+    # except (requests.exceptions.MissingSchema,
+    #         requests.exceptions.InvalidSchema,
+    #         requests.exceptions.InvalidURL,
+    #         requests.exceptions.HTTPError,
+    #         requests.exceptions.ConnectionError
+    #         ):
+        return False
     return True
 
 
