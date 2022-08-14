@@ -3,10 +3,9 @@
 venv/
 dist/
 __pycache__
+var/
+.pytest_cache/
 .coverage
 coverage.xml
-.pytest_cache/
 .vim
-var/
-logs/
-/app_log.log
+*.log
