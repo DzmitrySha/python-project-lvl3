@@ -1,7 +1,6 @@
 """Processes module."""
 
 import os
-# import sys
 import requests
 import re
 from urllib.request import urlopen
@@ -14,36 +13,23 @@ logger = app_logger.get_logger(__name__)
 
 
 def is_url_correct(url: str):
-    try:
-        requests.get(url)
-    except requests.exceptions.RequestException as error:
-        logger.error('requested url is not correct!')
-    # except (requests.exceptions.MissingSchema,
-    #         requests.exceptions.InvalidSchema,
-    #         requests.exceptions.InvalidURL,
-    #         requests.exceptions.HTTPError,
-    #         requests.exceptions.ConnectionError
-    #         ):
-        raise error
+    if not requests.get(url):
+        logger.error(f" requested url: {url} - does not correct! ")
+        return False
     return True
 
 
-def is_folder_exists(folder_path: str) -> bool:
-    try:
-        not os.path.exists(folder_path)
-    except OSError as error:
-        logger.error('the output folder does not exist! '
-                     'Please, create it before!')
-        raise error
-        # sys.exit(1)
+def is_folder_exists(dir_path: str) -> bool:
+    if not os.path.exists(dir_path):
+        logger.error(f"output folder: {dir_path} - does not exist!")
+        return False
     return True
 
 
 def make_soup(url: str) -> BeautifulSoup:
     """Make soup object from url"""
-    if is_url_correct(url):
-        soup = BeautifulSoup(urlopen(url), 'html.parser')
-        return soup
+    soup = BeautifulSoup(urlopen(url), 'html.parser')
+    return soup
 
 
 def clearing_url(url: str) -> str:
@@ -70,6 +56,7 @@ def create_dir(dir_path: str):
     """Create directory if it not exists"""
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
+    pass
 
 
 def write_to_file(file_path, file_content):
@@ -101,9 +88,10 @@ def get_sources(soup, url: str, tag: str, attr: str,
 
                 bar = ChargingBar('progress: ', min=0, max=1)
                 logger.info(f"source url: {src_url}")
+
                 bar.next()
                 write_to_file(src_local_path, src_content)
-                logger.debug(" - successfully downloaded")
+                print(" - downloaded")
                 bar.finish()
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
