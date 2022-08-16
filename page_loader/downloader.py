@@ -2,7 +2,6 @@
 
 import os
 import requests
-
 from page_loader import app_logger
 from page_loader.processes import (make_soup, write_to_file)
 from page_loader.download_sources import sources_download
@@ -25,7 +24,7 @@ def download(url: str, temp_folder=""):
 
     try:
         requests.get(url)
-    except requests.exceptions.RequestException as err:
+    except requests.HTTPError as err:
         logger.error('requested url is not correct!')
         raise err
 
