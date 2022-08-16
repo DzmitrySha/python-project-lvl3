@@ -1,12 +1,10 @@
 """Page loader - start module."""
 
 import os
-# import sys
 import requests
 
 from page_loader import app_logger
-from page_loader.processes import (make_soup, write_to_file,
-                                   is_folder_exists)
+from page_loader.processes import (make_soup, write_to_file)
 from page_loader.download_sources import sources_download
 from page_loader.download_html import html_download
 
@@ -19,33 +17,28 @@ def download(url: str, temp_folder=""):
     to exist specified folder"""
     output_path = os.path.join(os.getcwd(), temp_folder)
 
-    try:
-        is_folder_exists(output_path)
-    except OSError as error:
-        logger.info(
-            'the output directory does not exist! Please create it before!'
-        )
-        raise error
-
     logger.info(f"requested url: {url}")
     logger.info(f"output path: {output_path}")
 
+    if not os.path.exists(output_path):
+        logger.error('the output directory does not exist!')
+
     try:
         requests.get(url)
-    except requests.exceptions.RequestException as error:
+    except requests.exceptions.RequestException as err:
         logger.error('requested url is not correct!')
-        raise error
+        raise err
 
     soup = make_soup(url)
     html_file_path = html_download(soup, url, temp_folder)
 
-    logger.info(f"write html file: {html_file_path}")
+    logger.info(f"write html file: {html_file_path} - download OK!")
     logger.info("downloading sources: ... ")
 
     sources_download(soup, url, temp_folder)
     write_to_file(html_file_path, soup.prettify())
 
+    logger.info("All files successfully downloaded!")
     logger.info(f"page was downloaded as: {html_file_path}")
 
     return html_file_path
-    # sys.exit(1)

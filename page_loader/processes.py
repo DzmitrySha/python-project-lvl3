@@ -14,14 +14,12 @@ logger = app_logger.get_logger(__name__)
 
 def is_url_correct(url: str):
     if not requests.get(url):
-        logger.error(f" requested url: {url} - does not correct! ")
         return False
     return True
 
 
 def is_folder_exists(dir_path: str) -> bool:
     if not os.path.exists(dir_path):
-        logger.error(f"output folder: {dir_path} - does not exist!")
         return False
     return True
 
@@ -86,12 +84,12 @@ def get_sources(soup, url: str, tag: str, attr: str,
                 src_local_path = os.path.join(dir_path, src_name)
                 src_content = requests.get(src_url).content
 
-                bar = ChargingBar('progress: ', min=0, max=1)
-                logger.info(f"source url: {src_url}")
+                bar = ChargingBar(f'{src_name} ', min=0, max=1)
+                # logger.info(f"source url: {src_url}")
 
                 bar.next()
                 write_to_file(src_local_path, src_content)
-                print(" - downloaded")
+                logger.info(f"{src_name} - download OK!")
                 bar.finish()
 
                 src[attr] = src[attr].replace(src.get(attr), src_local_url)
