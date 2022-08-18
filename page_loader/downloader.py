@@ -24,7 +24,9 @@ def download(url: str, temp_folder=""):
 
     try:
         requests.get(url)
-    except requests.HTTPError as err:
+    except requests.exceptions.HTTPError as err:
+        raise err
+    except requests.exceptions.RequestException as err:
         logger.error('requested url is not correct!')
         raise err
 
