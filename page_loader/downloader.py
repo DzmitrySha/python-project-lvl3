@@ -23,8 +23,10 @@ def download(url: str, temp_folder=""):
         logger.error('the output directory does not exist!')
 
     try:
-        requests.get(url)
+        r = requests.get(url)
     except requests.exceptions.HTTPError as err:
+        if r.raise_for_status() != 200:
+            logger.error('Status code is not 200!')
         raise err
     except requests.exceptions.RequestException as err:
         logger.error('requested url is not correct!')
