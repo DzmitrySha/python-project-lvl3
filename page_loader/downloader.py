@@ -19,19 +19,33 @@ def download(url: str, temp_folder=""):
     logger.info(f"requested url: {url}")
     logger.info(f"output path: {output_path}")
 
-    if not os.path.exists(output_path):
+    try:
+        os.path.exists(output_path)
+    except OSError as err:
         logger.error('the output directory does not exist!')
+        raise err
 
     try:
         r = requests.get(url)
         r.raise_for_status()
-    except requests.exceptions.HTTPError:
-        logger.error('Status code is not 200!')
-        raise
+    except (requests.exceptions.MissingSchema,
+            requests.exceptions.InvalidSchema,
+            requests.exceptions.InvalidURL) as error:
+        logger.error('Requested url is not correct!')
+        raise error
+    except requests.exceptions.HTTPError as error:
+        logger.error('HTTPError!')
+        raise error
+    except requests.exceptions.ConnectionError as error:
+        logger.error('Connection Error!')
+        raise error
 
-    except requests.exceptions.RequestException as err:
-        logger.error('requested url is not correct!')
-        raise err
+    # except requests.exceptions.HTTPError as err:
+    #     logger.error(f'Status code is not 200!: {err}')
+    #     raise
+    # except requests.exceptions.RequestException as err:
+    #     logger.error(f'requested url is not correct!')
+    #     raise
 
     soup = make_soup(url)
     html_file_path = html_download(soup, url, temp_folder)
