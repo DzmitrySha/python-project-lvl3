@@ -24,10 +24,11 @@ def download(url: str, temp_folder=""):
 
     try:
         r = requests.get(url)
-    except requests.exceptions.HTTPError as err:
-        if r.raise_for_status() != 200:
-            logger.error('Status code is not 200!')
-        raise err
+        r.raise_for_status()
+    except requests.exceptions.HTTPError:
+        logger.error('Status code is not 200!')
+        raise
+
     except requests.exceptions.RequestException as err:
         logger.error('requested url is not correct!')
         raise err
