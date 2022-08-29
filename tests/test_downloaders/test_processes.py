@@ -6,16 +6,9 @@ import requests
 import tempfile
 from bs4 import BeautifulSoup
 from page_loader.processes import (make_name, make_soup,
-                                   create_dir, is_url_correct,
-                                   is_folder_exists)
+                                   create_dir, is_folder_exists)
 
 # DOWNLOADER = 'processes'
-
-
-@pytest.mark.asyncio
-async def test_is_url_correct(urls, requests_mock):
-    requests_mock.get(urls['url'], text='True')
-    assert is_url_correct(urls['url']) is True
 
 
 @pytest.mark.asyncio

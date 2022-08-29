@@ -3,7 +3,7 @@
 import os
 import requests
 from page_loader import app_logger
-from page_loader.processes import (make_soup, write_to_file)
+from page_loader.processes import make_soup, write_to_file
 from page_loader.download_sources import sources_download
 from page_loader.download_html import html_download
 
@@ -21,13 +21,19 @@ def download(url: str, temp_folder=""):
 
     try:
         os.path.exists(output_path)
+    # except FileNotFoundError as err:
+    #     logger.error('The specified folder does not exist!')
+    #     raise err
+    # except PermissionError as err:
+    #     logger.error('You don`t have permission to write in this folder!')
+    #     raise err
     except OSError as err:
         logger.error('the output directory does not exist!')
         raise err
 
     try:
-        r = requests.get(url)
-        r.raise_for_status()
+        response = requests.get(url)
+        response.raise_for_status()
     except (requests.exceptions.MissingSchema,
             requests.exceptions.InvalidSchema,
             requests.exceptions.InvalidURL) as error:
