@@ -8,14 +8,13 @@ FORMAT = "(%(asctime)s) [%(levelname)s]: " \
 
 logging.basicConfig(
     format=FORMAT,
-    filename="page_loader.log"
+    filename='page_loader.log',
+    filemode='w',
 )
 
 
 def get_logger(name):
     """Make logger"""
-    with open('page_loader.log', 'w'):
-        pass
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     return logger
