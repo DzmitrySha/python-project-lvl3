@@ -10,7 +10,6 @@ def parse_args_():
         description="Downloads a page from the internet "
                     "to the specified folder.")
     parser.add_argument('source_url', type=str)
-    parser.add_argument('-o', '--output',
-                        default=os.getcwd())
+    parser.add_argument('-o', '--output', default=os.getcwd())
     args = parser.parse_args()
     return args.source_url, args.output

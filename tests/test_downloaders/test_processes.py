@@ -5,16 +5,9 @@ import pytest
 import requests
 import tempfile
 from bs4 import BeautifulSoup
-from page_loader.processes import (make_name, make_soup,
-                                   create_dir, is_folder_exists)
+from page_loader.processes import (make_name, make_soup, create_dir)
 
 # DOWNLOADER = 'processes'
-
-
-@pytest.mark.asyncio
-async def test_is_folder_exists():
-    folder_path = os.getcwd()
-    assert is_folder_exists(folder_path) is True
 
 
 @pytest.mark.asyncio

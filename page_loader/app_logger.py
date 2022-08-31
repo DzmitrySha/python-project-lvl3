@@ -2,7 +2,6 @@
 
 import logging
 
-
 FORMAT = "(%(asctime)s) [%(levelname)s]: " \
          "%(name)s:%(filename)s:%(lineno)d %(message)s"
 
@@ -13,7 +12,7 @@ logging.basicConfig(
 )
 
 
-def get_logger(name):
+def make_logger(name):
     """Make logger"""
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)

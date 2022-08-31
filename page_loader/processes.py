@@ -3,24 +3,11 @@
 import os
 import requests
 import re
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
-from progress.bar import ChargingBar
-from page_loader import app_logger
+from page_loader.app_logger import make_logger
 
-logger = app_logger.get_logger(__name__)
-
-
-def is_folder_exists(dir_path: str) -> bool:
-    if not os.path.exists(dir_path):
-        return False
-    return True
-
-
-def make_soup(url: str) -> BeautifulSoup:
-    """Make soup object from url"""
-    soup = BeautifulSoup(requests.get(url).text, 'html.parser')
-    return soup
+logger = make_logger(__name__)
 
 
 def clearing_url(url: str) -> str:
@@ -47,7 +34,6 @@ def create_dir(dir_path: str):
     """Create directory if it not exists"""
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
-    # return os.path.join(os.getcwd(), dir_path)
 
 
 def write_to_file(file_path, file_content):
@@ -57,32 +43,29 @@ def write_to_file(file_path, file_content):
         file.write(file_content)
 
 
-def get_sources(soup, url: str, tag: str, attr: str,
-                dir_name: str, dir_path: str):
-    """Get sources from HTML page"""
-    domain_name = urlparse(url).netloc
-    list_soup_tags = soup.find_all(tag)
-    for src in list_soup_tags:
-        if src:
-            src_url = src.get(attr)
-            src_domain_name = str(urlparse(src_url).netloc)
+def make_soup(url):
+    try:
+        response = requests.get(url)  # запрос на сервер
+        response.raise_for_status()
+    except (requests.exceptions.MissingSchema,
+            requests.exceptions.InvalidSchema,
+            requests.exceptions.InvalidURL) as error:
+        logger.error('Requested url is not correct!')
+        raise error
+    except requests.exceptions.HTTPError as error:
+        logger.error('HTTPError!')
+        raise error
+    except requests.exceptions.ConnectionError as error:
+        logger.error('Connection Error!')
+        raise error
 
-            if domain_name in src_domain_name or not src_domain_name:
-                if not src_domain_name:
+    # except requests.exceptions.HTTPError as err:
+    #     logger.error(f'Status code is not 200!: {err}')
+    #     raise
+    # except requests.exceptions.RequestException as err:
+    #     logger.error(f'requested url is not correct!')
+    #     raise
 
-                    src_url = urljoin(url, clearing_url(src_url))
-
-                src_name = make_name(src_url, os.path.splitext(src_url)[1])
-                src_local_url = os.path.join(dir_name, src_name)
-                src_local_path = os.path.join(dir_path, src_name)
-                src_content = requests.get(src_url).content
-
-                bar = ChargingBar(f'{src_name} ', min=0, max=1)
-                # logger.info(f"source url: {src_url}")
-
-                bar.next()
-                write_to_file(src_local_path, src_content)
-                logger.info(f"{src_name} - download OK!")
-                bar.finish()
-
-                src[attr] = src[attr].replace(src.get(attr), src_local_url)
+    else:
+        soup = BeautifulSoup(response.text, "html.parser")
+    return soup
