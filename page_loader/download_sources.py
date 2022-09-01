@@ -65,7 +65,12 @@ def sources_download(soup, url: str, temp_folder: str):
             src_local_url = os.path.join(dir_name, src_name)
             src_local_path = os.path.join(dir_path, src_name)
 
-            src_content = requests.get(src_url).content  # запрос на сервер
+            try:
+                response = requests.get(src_url)  # запрос на сервер
+                src_content = response.content
+            except requests.exceptions.RequestException as error:
+                logger.error('Connection Error!')
+                raise error
 
             bar = FillingCirclesBar(f'{src_name} ', min=0, max=1)
 

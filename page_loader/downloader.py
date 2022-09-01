@@ -34,7 +34,7 @@ def download(url: str, temp_folder=''):
     logger.info("All sources successfully downloaded!")
 
     html_file_name, html_file_path = html_download(soup, url, temp_folder)
-    logger.info(f"write html file: {html_file_path} - download OK!")
+    # logger.info(f"html file: {html_file_name} - download OK!")
     logger.info(f"page was downloaded as: {html_file_path}")
 
     return html_file_name
