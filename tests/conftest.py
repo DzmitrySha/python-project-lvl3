@@ -16,31 +16,31 @@ def event_loop():
 
 
 @pytest.fixture(scope="session")
-def before_html():
+def before_html_path():
     return os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'before.html')
 
 
 @pytest.fixture(scope="session")
-def result_html():
+def result_html_path():
     return os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'result.html')
 
 
 @pytest.fixture(scope="session")
-def jpg_file():
+def jpg_file_path():
     return os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'python.jpg')
 
 
 @pytest.fixture(scope="session")
-def css_file():
+def css_file_path():
     return os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'style.css')
 
 
 @pytest.fixture(scope="session")
-def js_file():
+def js_file_path():
     return os.path.join(os.path.dirname(__file__),
                         FIXTURES_FOLDER, 'script.js')
 
@@ -48,11 +48,13 @@ def js_file():
 @pytest.fixture(scope="session")
 def urls():
     mock = Mock()
-    mock.url = "https://ru.hexlet.io"
+    mock.url = "https://site.io"
+    mock.url_exc = "site.io"
     urls = {
-        'url': 'http://test.com',
-        'url_s': 'https://site/test.com',
+        'http_url': 'http://test.com',
+        'https_url': 'https://site/test.com',
         'mock_url': mock.url,
+        'mock_url_exc': mock.url_exc,
     }
     return urls
 
