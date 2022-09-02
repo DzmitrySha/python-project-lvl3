@@ -48,7 +48,7 @@ def js_file_path():
 @pytest.fixture(scope="session")
 def urls():
     mock = Mock()
-    mock.url = "https://site.io"
+    mock.url = "https://ru.hexlet.io"
     mock.url_exc = "site.io"
     urls = {
         'http_url': 'http://test.com',

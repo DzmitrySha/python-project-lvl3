@@ -37,9 +37,9 @@ def create_dir(dir_path: str):
 
 
 def write_to_file(file_path, file_content):
-    """Write binary source content to file"""
-    fmt = 'wb' if isinstance(file_content, bytes) else 'w'
-    with open(file_path, fmt) as file:
+    """Write source content to file"""
+    flag = 'wb' if isinstance(file_content, bytes) else 'w'
+    with open(file_path, flag) as file:
         file.write(file_content)
 
 
