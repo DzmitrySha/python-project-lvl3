@@ -24,11 +24,10 @@ def prepare_sources_urls(soup, url: str) -> list:
     for src in list_soup_tags:
         for attr in set(tags.values()):
             list_sources_urls.append(src.get(attr))
-    pre_url_list = filter(lambda x: x is not None, list_sources_urls)
+    list_sources_urls = filter(lambda x: x is not None, list_sources_urls)
     list_sources_urls = list(filter(
-        lambda x: urlparse(x).netloc == domain_name
-        or not urlparse(x).netloc, pre_url_list)
-    )
+        lambda x: urlparse(x).netloc == domain_name or not urlparse(x).netloc,
+        list_sources_urls))
     return list_sources_urls
 
 

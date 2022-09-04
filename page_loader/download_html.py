@@ -11,4 +11,4 @@ def html_download(soup, url: str, temp_folder=''):
     html_file_name = make_name(url, '.html')
     html_file_path = os.path.join(temp_folder, html_file_name)
     write_to_file(html_file_path, soup.prettify())  # запись в файл
-    return html_file_name, html_file_path
+    return html_file_path
