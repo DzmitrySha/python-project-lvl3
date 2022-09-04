@@ -27,7 +27,7 @@ def make_name(url: str, ext='') -> str:
         clear_url = clear_url.replace(extension, '')
     name = "".join(char if re.match(mask, char) else indent
                    for char in clear_url)
-    return name + ext if ext else name
+    return name + ext if ext else name + '.html'
 
 
 def create_dir(dir_path: str):
