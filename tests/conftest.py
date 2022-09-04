@@ -5,6 +5,7 @@ import asyncio
 import pytest
 
 FIXTURES_FOLDER = 'fixtures'
+EXPECTED_FOLDER = 'fixtures/expected/page-loader-hexlet-repl-co_files'
 
 
 @pytest.fixture(scope="module")
@@ -16,39 +17,44 @@ def event_loop():
 
 @pytest.fixture(scope="session")
 def before_html_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'before.html')
+    return os.path.join(os.path.dirname(__file__), FIXTURES_FOLDER,
+                        'page-loader-hexlet-repl-co.html'
+                        )
 
 
 @pytest.fixture(scope="session")
 def result_html_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'result.html')
+    return os.path.join(os.path.dirname(__file__), FIXTURES_FOLDER,
+                        'expected/page-loader-hexlet-repl-co.html'
+                        )
 
 
 @pytest.fixture(scope="session")
 def jpg_file_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'python.jpg')
+    return os.path.join(
+        os.path.dirname(__file__), EXPECTED_FOLDER,
+        'page-loader-hexlet-repl-co-assets-professions-python.jpg'
+    )
 
 
 @pytest.fixture(scope="session")
 def css_file_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'style.css')
+    return os.path.join(os.path.dirname(__file__), EXPECTED_FOLDER,
+                        'page-loader-hexlet-repl-co-assets-application.css'
+                        )
 
 
 @pytest.fixture(scope="session")
 def js_file_path():
-    return os.path.join(os.path.dirname(__file__),
-                        FIXTURES_FOLDER, 'script.js')
+    return os.path.join(os.path.dirname(__file__), EXPECTED_FOLDER,
+                        'page-loader-hexlet-repl-co-script.js'
+                        )
 
 
 @pytest.fixture(scope="session")
 def urls():
     urls = {
-        'http_url': "http://site.com",
-        'https_url': 'https://site.com/test',
+        'https_url': "https://page-loader.hexlet.repl.co",
         'bad_url': 'site.com',
     }
     return urls
