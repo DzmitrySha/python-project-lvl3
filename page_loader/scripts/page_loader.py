@@ -13,12 +13,12 @@ def main():
     """Get start here."""
     source_url, output = parse_args_()
     output_path = os.path.join(os.getcwd(), output)
-    print(f"requested url: {source_url}")
-    print(f"output folder: {output_path}")
+    print(f"Requested url: {source_url}")
+    print(f"Output folder: {output_path}")
 
     try:
-        html_file_path = download(source_url, output)
-        print(f"page was downloaded as: {html_file_path}")
+        output_path = download(source_url, output)
+        print(f"Page was downloaded as: {output_path}")
     except Exception as error:
         logger.debug(error)
         print("An unexpected error occurred. "

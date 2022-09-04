@@ -49,7 +49,7 @@ def sources_download(soup, url: str, temp_folder: str):
     domain_name = urlparse(url).netloc
     diff_urls = []
     list_sources_urls = get_sources_urls(soup)
-    bar = Bar(f'Downloading: ', max=len(list_sources_urls))
+    bar = Bar('Downloading: ', max=len(list_sources_urls))
 
     for src_url in list_sources_urls:
         bar.next()
