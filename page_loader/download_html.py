@@ -10,5 +10,5 @@ logger = make_logger(__name__)
 def html_download(soup, url: str, temp_folder=''):
     html_file_name = make_name(url, '.html')
     html_file_path = os.path.join(temp_folder, html_file_name)
-    write_to_file(html_file_path, soup.prettify())  # запись в файл
+    write_to_file(html_file_path, soup.prettify())
     return html_file_path

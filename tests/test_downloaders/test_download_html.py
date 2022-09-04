@@ -6,8 +6,6 @@ import tempfile
 from bs4 import BeautifulSoup
 from page_loader.download_html import html_download
 
-# DOWNLOADER = 'download_html'
-
 
 @pytest.mark.asyncio
 async def test_html_download(

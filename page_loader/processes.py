@@ -58,14 +58,6 @@ def make_soup(url):
     except requests.exceptions.ConnectionError as error:
         logger.error('Connection Error!')
         raise error
-
-    # except requests.exceptions.HTTPError as err:
-    #     logger.error(f'Status code is not 200!: {err}')
-    #     raise
-    # except requests.exceptions.RequestException as err:
-    #     logger.error(f'requested url is not correct!')
-    #     raise
-
     else:
         soup = BeautifulSoup(response.text, "html.parser")
     return soup

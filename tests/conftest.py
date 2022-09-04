@@ -38,7 +38,6 @@ def html_file_path():
     )
 
 
-
 @pytest.fixture(scope="session")
 def jpg_file_path():
     return os.path.join(
@@ -68,14 +67,3 @@ def urls():
         'bad_url': 'site.com',
     }
     return urls
-
-
-# @pytest.fixture(scope="function")
-# async def result_render(request):
-#     assert getattr(request.module, 'DOWNLOADER', None)
-#
-#     result_path = os.path.join(os.path.dirname(__file__),
-#                                FIXTURES_FOLDER, request.module.DOWNLOADER)
-#
-#     with open(result_path) as file:
-#         return file.read()

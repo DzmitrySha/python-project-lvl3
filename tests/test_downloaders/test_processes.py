@@ -2,7 +2,6 @@
 
 import os
 import pytest
-import requests
 import tempfile
 from bs4 import BeautifulSoup
 from page_loader.processes import make_name, make_soup, create_dir
@@ -10,8 +9,7 @@ from page_loader.processes import make_name, make_soup, create_dir
 
 @pytest.mark.asyncio
 async def test_make_soup(before_html_path, urls, requests_mock):
-    requests_mock.get(urls['https_url'], text='data')
-    data = requests.get(urls['https_url']).text
+    requests_mock.get(urls['https_url'], text='')
     soup = make_soup(urls['https_url'])
     assert type(soup) == BeautifulSoup
 
@@ -32,6 +30,6 @@ async def test_create_dir():
 
 
 @pytest.mark.asyncio
-async def test_make_soup_exc(urls):
+async def test_make_soup_exceptions(urls):
     with pytest.raises(Exception):
         make_soup(urls['bad_url'])
