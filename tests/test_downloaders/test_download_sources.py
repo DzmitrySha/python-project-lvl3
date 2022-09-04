@@ -3,47 +3,38 @@
 import os
 import pytest
 import tempfile
-import requests
 from bs4 import BeautifulSoup
-from page_loader.download_sources import sources_download
+from page_loader.download_sources import sources_download, prepare_sources_urls
 
 
-# HTML_MAIN_URL = "https://ru.hexlet.io"
-# PAGE_URL = "https://ru.hexlet.io/courses"
-# JPG_URL = "https://ru.hexlet.io/assets/professions/python.jpg"
-# CSS_URL = "https://ru.hexlet.io/assets/application.css"
-# JS_URL = "https://ru.hexlet.io/packs/js/runtime.js"
-# MOCK_URL = "https://cdn2.hexlet.io/assets/menu.css"
-#
-# DIR_NAME = "ru-hexlet-io_files"
-# FILENAMES = {
-#     "page_url_name": "ru-hexlet-io-courses",
-#     "jpg_mock": "ru-hexlet-io-assets-professions-python.jpg",
-#     "css_mock": "ru-hexlet-io-assets-application.css",
-#     "js_mock": "ru-hexlet-io-packs-js-runtime.js",
-# }
-
-
-HTML_MAIN_URL = "https://site.com"
-PAGE_URL = "https://site.com/blog/about"
-JPG_URL = "https://site.com/photos/me.jpg"
-CSS_URL = "https://site.com/blog/about/assets/styles.css"
-JS_URL = "https://site.com/assets/scripts.js"
+PAGE_URL = "/courses"
+JPG_URL = "/assets/professions/nodejs.png"
+CSS_URL = "/assets/application.css"
+JS_URL = "/script.js"
 MOCK_URL = "https://cdn2.site.com/blog/assets/style.css"
+SOURCES_URLS = ['/assets/application.css', '/courses',
+                '/assets/professions/nodejs.png', '/script.js']
 
 
-DIR_NAME = "site-com_files"
+DIR_NAME = "page-loader-hexlet-repl-co_files"
 FILENAMES = {
-    "page_url_name": "site-com-blog-about",
-    "jpg_mock": "site-com-photos-me.jpg",
-    "css_mock": "site-com-blog-about-assets-styles.css",
-    "js_mock": "site-com-assets-scripts.js",
+    "page_url_name": "page-loader-hexlet-repl-co-courses",
+    "jpg_mock": "page-loader-hexlet-repl-co-assets-professions-nodejs.png",
+    "css_mock": "page-loader-hexlet-repl-co-assets-application.css",
+    "js_mock": "page-loader-hexlet-repl-co-script.js",
 }
 
 
 def read_file(path: str, flag='r'):
     with open(path, flag) as file:
         return file.read()
+
+
+@pytest.mark.asyncio
+async def test_prepare_sources_urls(before_html_path, urls):
+    soup = BeautifulSoup(read_file(before_html_path), 'html.parser')
+    sources_list = prepare_sources_urls(soup, urls['https_url'])
+    assert sources_list == SOURCES_URLS
 
 
 @pytest.mark.asyncio
@@ -60,7 +51,7 @@ async def test_sources_download(
     js_content = read_file(js_file_path, 'rb')
     mock_content = 'not_exist'
 
-    requests_mock.get(HTML_MAIN_URL, text=result_html_content)
+    requests_mock.get(urls['https_url'], text=result_html_content)
     # assert result_html_content == requests.get(HTML_MAIN_URL).text
 
     requests_mock.get(PAGE_URL, text=before_html_content)
@@ -81,7 +72,7 @@ async def test_sources_download(
     soup = BeautifulSoup(before_html_content, "html.parser")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        sources_download(soup, HTML_MAIN_URL, tmpdirname)
+        sources_download(soup, urls['https_url'], tmpdirname)
         for file_name in FILENAMES.values():
             file_path = os.path.join(DIR_NAME, file_name)
             assert os.path.exists(os.path.join(tmpdirname, file_path))
