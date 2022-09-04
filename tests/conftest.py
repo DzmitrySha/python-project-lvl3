@@ -3,7 +3,6 @@
 import os
 import asyncio
 import pytest
-from unittest.mock import Mock
 
 FIXTURES_FOLDER = 'fixtures'
 
@@ -47,14 +46,10 @@ def js_file_path():
 
 @pytest.fixture(scope="session")
 def urls():
-    mock = Mock()
-    mock.url = "https://ru.hexlet.io"
-    mock.url_exc = "site.io"
     urls = {
-        'http_url': 'http://test.com',
-        'https_url': 'https://site/test.com',
-        'mock_url': mock.url,
-        'mock_url_exc': mock.url_exc,
+        'http_url': "http://site.com",
+        'https_url': 'https://site.com/test',
+        'bad_url': 'site.com',
     }
     return urls
 
