@@ -5,7 +5,8 @@ import asyncio
 import pytest
 
 FIXTURES_FOLDER = 'fixtures'
-EXPECTED_FOLDER = 'fixtures/expected/page-loader-hexlet-repl-co_files'
+EXPECTED_FOLDER = 'fixtures/expected'
+EXPECTED_FILES_FOLDER = 'fixtures/expected/page-loader-hexlet-repl-co_files'
 
 
 @pytest.fixture(scope="module")
@@ -24,29 +25,38 @@ def before_html_path():
 
 @pytest.fixture(scope="session")
 def result_html_path():
-    return os.path.join(os.path.dirname(__file__), FIXTURES_FOLDER,
-                        'expected/page-loader-hexlet-repl-co.html'
+    return os.path.join(os.path.dirname(__file__), EXPECTED_FOLDER,
+                        'page-loader-hexlet-repl-co.html'
                         )
+
+
+@pytest.fixture(scope="session")
+def html_file_path():
+    return os.path.join(
+        os.path.dirname(__file__), EXPECTED_FILES_FOLDER,
+        'page-loader-hexlet-repl-co-courses.html'
+    )
+
 
 
 @pytest.fixture(scope="session")
 def jpg_file_path():
     return os.path.join(
-        os.path.dirname(__file__), EXPECTED_FOLDER,
+        os.path.dirname(__file__), EXPECTED_FILES_FOLDER,
         'page-loader-hexlet-repl-co-assets-professions-python.jpg'
     )
 
 
 @pytest.fixture(scope="session")
 def css_file_path():
-    return os.path.join(os.path.dirname(__file__), EXPECTED_FOLDER,
+    return os.path.join(os.path.dirname(__file__), EXPECTED_FILES_FOLDER,
                         'page-loader-hexlet-repl-co-assets-application.css'
                         )
 
 
 @pytest.fixture(scope="session")
 def js_file_path():
-    return os.path.join(os.path.dirname(__file__), EXPECTED_FOLDER,
+    return os.path.join(os.path.dirname(__file__), EXPECTED_FILES_FOLDER,
                         'page-loader-hexlet-repl-co-script.js'
                         )
 

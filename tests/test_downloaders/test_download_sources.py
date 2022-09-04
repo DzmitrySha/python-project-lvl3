@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from page_loader.download_sources import sources_download, prepare_sources_urls
 
 
-PAGE_URL = "/courses"
+HTML_URL = "/courses"
 JPG_URL = "/assets/professions/nodejs.png"
 CSS_URL = "/assets/application.css"
 JS_URL = "/script.js"
@@ -18,7 +18,7 @@ SOURCES_URLS = ['/assets/application.css', '/courses',
 
 DIR_NAME = "page-loader-hexlet-repl-co_files"
 FILENAMES = {
-    "page_url_name": "page-loader-hexlet-repl-co-courses",
+    "html_mock": "page-loader-hexlet-repl-co-courses.html",
     "jpg_mock": "page-loader-hexlet-repl-co-assets-professions-nodejs.png",
     "css_mock": "page-loader-hexlet-repl-co-assets-application.css",
     "js_mock": "page-loader-hexlet-repl-co-script.js",
@@ -41,11 +41,12 @@ async def test_prepare_sources_urls(before_html_path, urls):
 async def test_sources_download(
         before_html_path, jpg_file_path,
         css_file_path, js_file_path,
-        result_html_path, urls,
-        requests_mock
+        result_html_path, html_file_path,
+        urls, requests_mock
 ):
     before_html_content = read_file(before_html_path)
     result_html_content = read_file(result_html_path)
+    html_content = read_file(html_file_path)
     jpg_content = read_file(jpg_file_path, 'rb')
     css_content = read_file(css_file_path)
     js_content = read_file(js_file_path, 'rb')
@@ -54,8 +55,8 @@ async def test_sources_download(
     requests_mock.get(urls['https_url'], text=result_html_content)
     # assert result_html_content == requests.get(HTML_MAIN_URL).text
 
-    requests_mock.get(PAGE_URL, text=before_html_content)
-    # assert before_html_content == requests.get(PAGE_URL).text
+    requests_mock.get(HTML_URL, text=html_content)
+    # assert html_content == requests.get(HTML_URL).text
 
     requests_mock.get(JPG_URL, content=jpg_content)
     # assert jpg_content == requests.get(JPG_URL).content
