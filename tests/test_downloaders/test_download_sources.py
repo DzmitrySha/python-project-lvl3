@@ -11,7 +11,7 @@ PAGE_URL = "/courses"
 JPG_URL = "/assets/professions/nodejs.png"
 CSS_URL = "/assets/application.css"
 JS_URL = "/script.js"
-MOCK_URL = "https://cdn2.site.com/blog/assets/style.css"
+MOCK_URL = "https://cdn2.page-loader.hexlet.repl.co/blog/assets/style.css"
 SOURCES_URLS = ['/assets/application.css', '/courses',
                 '/assets/professions/nodejs.png', '/script.js']
 
