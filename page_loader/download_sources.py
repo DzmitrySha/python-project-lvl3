@@ -29,7 +29,6 @@ def prepare_sources_urls(soup, url: str) -> list:
         lambda x: urlparse(x).netloc == domain_name
         or not urlparse(x).netloc, pre_url_list)
     )
-    print(list_sources_urls)
     return list_sources_urls
 
 
