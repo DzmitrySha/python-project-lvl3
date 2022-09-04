@@ -13,8 +13,8 @@ def download(url: str, temp_folder=''):
 
     output_path = os.path.join(os.getcwd(), temp_folder)
 
-    logger.info(f"requested url: {url}")
-    logger.info(f"output path: {output_path}")
+    logger.info(f"Requested url: {url}")
+    logger.info(f"Output path: {output_path}")
 
     try:
         os.path.exists(output_path)
@@ -29,9 +29,9 @@ def download(url: str, temp_folder=''):
         raise err
 
     soup = make_soup(url)
-    logger.info("downloading sources: ... ")
+    logger.info("Downloading resources: ... ")
     sources_download(soup, url, temp_folder)
-    logger.info("All sources successfully downloaded!")
+    logger.info("All resources successfully downloaded!")
 
     html_file_name, html_file_path = html_download(soup, url, temp_folder)
     # logger.info(f"html file: {html_file_name} - download OK!")
