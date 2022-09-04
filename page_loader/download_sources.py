@@ -26,7 +26,8 @@ def prepare_sources_urls(soup, url: str) -> list:
             list_sources_urls.append(src.get(attr))
     pre_url_list = filter(lambda x: x is not None, list_sources_urls)
     list_sources_urls = list(filter(
-        lambda x: domain_name in x or not urlparse(x).netloc, pre_url_list)
+        lambda x: urlparse(x).netloc == domain_name
+        or not urlparse(x).netloc, pre_url_list)
     )
     print(list_sources_urls)
     return list_sources_urls
