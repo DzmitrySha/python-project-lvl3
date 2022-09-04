@@ -3,13 +3,12 @@
 import os
 import requests
 from urllib.parse import urlparse, urljoin
-from progress.bar import FillingCirclesBar
+from progress.bar import Bar
 from page_loader.processes import (make_name, create_dir,
                                    clearing_url, write_to_file)
 from page_loader.app_logger import make_logger
 
 logger = make_logger(__name__)
-
 
 tags = {
     "img": "src",
@@ -50,11 +49,13 @@ def sources_download(soup, url: str, temp_folder: str):
     domain_name = urlparse(url).netloc
     diff_urls = []
     list_sources_urls = get_sources_urls(soup)
+    bar = Bar(f'Downloading: ', max=len(list_sources_urls))
 
     for src_url in list_sources_urls:
+        bar.next()
         src_raw_url = src_url
-
         src_domain_name = urlparse(src_url).netloc
+
         if not src_domain_name:
             src_url = urljoin(url, clearing_url(src_url))
 
@@ -66,18 +67,16 @@ def sources_download(soup, url: str, temp_folder: str):
             src_local_path = os.path.join(dir_path, src_name)
 
             try:
-                response = requests.get(src_url)  # запрос на сервер
+                response = requests.get(src_url)
                 src_content = response.content
-            except requests.exceptions.RequestException as error:
-                logger.error('Connection Error!')
-                raise error
+            except requests.exceptions.RequestException:
+                logger.error('Connection Error while downloading resources!')
+                continue
 
-            bar = FillingCirclesBar(f'{src_name} ', min=0, max=1)
-
-            bar.next()
             write_to_file(src_local_path, src_content)  # запись в файл
             logger.info(f"{src_name} - download OK!")
-            bar.finish()
 
             diff_urls.append({'old_url': src_raw_url, 'new_url': src_local_url})
+
     replace_urls(soup, diff_urls)
+    bar.finish()
