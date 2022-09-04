@@ -17,13 +17,18 @@ tags = {
 }
 
 
-def get_sources_urls(soup) -> list:
+def prepare_sources_urls(soup, url: str) -> list:
     list_sources_urls = []
+    domain_name = urlparse(url).netloc
     list_soup_tags = soup.find_all(list(tags.keys()))
     for src in list_soup_tags:
         for attr in set(tags.values()):
             list_sources_urls.append(src.get(attr))
-    list_sources_urls = list(filter(lambda x: x is not None, list_sources_urls))
+    pre_url_list = filter(lambda x: x is not None, list_sources_urls)
+    list_sources_urls = list(filter(
+        lambda x: domain_name in x or not urlparse(x).netloc, pre_url_list)
+    )
+    print(list_sources_urls)
     return list_sources_urls
 
 
@@ -46,37 +51,34 @@ def sources_download(soup, url: str, temp_folder: str):
     dir_path = os.path.join(temp_folder, dir_name)
     create_dir(dir_path)
 
-    domain_name = urlparse(url).netloc
     diff_urls = []
-    list_sources_urls = get_sources_urls(soup)
+    list_sources_urls = prepare_sources_urls(soup, url)
     bar = Bar('Downloading: ', max=len(list_sources_urls))
 
     for src_url in list_sources_urls:
-        bar.next()
         src_raw_url = src_url
         src_domain_name = urlparse(src_url).netloc
 
         if not src_domain_name:
             src_url = urljoin(url, clearing_url(src_url))
 
-        if domain_name in src_url:
-            src_ext = os.path.splitext(src_url)[1]
-            src_name = make_name(src_url, src_ext)
+        src_ext = os.path.splitext(src_url)[1]
+        src_name = make_name(src_url, src_ext)
 
-            src_local_url = os.path.join(dir_name, src_name)
-            src_local_path = os.path.join(dir_path, src_name)
+        src_local_url = os.path.join(dir_name, src_name)
+        src_local_path = os.path.join(dir_path, src_name)
 
-            try:
-                response = requests.get(src_url)
-                src_content = response.content
-            except requests.exceptions.RequestException:
-                logger.error('Connection Error while downloading resources!')
-                continue
+        bar.next()
 
-            write_to_file(src_local_path, src_content)  # запись в файл
-            logger.info(f"{src_name} - download OK!")
-
-            diff_urls.append({'old_url': src_raw_url, 'new_url': src_local_url})
-
+        try:
+            response = requests.get(src_url)
+            src_content = response.content
+        except requests.exceptions.RequestException:
+            logger.error('Connection Error while downloading resources!')
+            continue
+        write_to_file(src_local_path, src_content)  # запись в файл
+        logger.info(f"{src_name} - download OK!")
+        diff_urls.append({'old_url': src_raw_url, 'new_url': src_local_url})
     replace_urls(soup, diff_urls)
+
     bar.finish()
