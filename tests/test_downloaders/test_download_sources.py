@@ -53,28 +53,32 @@ async def test_sources_download(
     mock_content = 'not_exist'
 
     requests_mock.get(urls['https_url'], text=result_html_content)
-    # assert result_html_content == requests.get(HTML_MAIN_URL).text
-
     requests_mock.get(HTML_URL, text=html_content)
-    # assert html_content == requests.get(HTML_URL).text
-
     requests_mock.get(JPG_URL, content=jpg_content)
-    # assert jpg_content == requests.get(JPG_URL).content
-
     requests_mock.get(CSS_URL, text=css_content)
-    # assert css_content == requests.get(CSS_URL).text
-
     requests_mock.get(JS_URL, content=js_content)
-    # assert js_content == requests.get(JS_URL).content
-
     requests_mock.get(MOCK_URL, text=mock_content)
-    # assert mock_content == requests.get(MOCK_URL).text
 
     soup = BeautifulSoup(before_html_content, "html.parser")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         sources_download(soup, urls['https_url'], tmpdirname)
+        dir_path = os.path.join(tmpdirname, DIR_NAME)
+
         for file_name in FILENAMES.values():
-            file_path = os.path.join(DIR_NAME, file_name)
-            assert os.path.exists(os.path.join(tmpdirname, file_path))
+            file_path = os.path.join(tmpdirname, DIR_NAME, file_name)
+            assert os.path.exists(file_path)
+
+        with open(os.path.join(dir_path, FILENAMES["html_mock"])) as f:
+            assert f.read() == html_content
+
+        with open(os.path.join(dir_path, FILENAMES["jpg_mock"]), 'rb') as f:
+            assert f.read() == jpg_content
+
+        with open(os.path.join(dir_path, FILENAMES["css_mock"])) as f:
+            assert f.read() == css_content
+
+        with open(os.path.join(dir_path, FILENAMES["js_mock"]), 'rb') as f:
+            assert f.read() == js_content
+
         assert not os.path.exists(os.path.join(tmpdirname, mock_content))
