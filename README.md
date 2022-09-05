@@ -10,6 +10,11 @@
 
 ## Instructions
 
+**Install/uninstall package:**
+
+`make package-install`
+`make package-uninstall`
+
 **Run help:**
 
 `page-loader -h`
@@ -25,6 +30,16 @@
 or
 
 `page-loader -o <exist_folder_path> <source_url> `
+
+**If you get an error - see log file (page_loader.log):** 
+
+`grep page_loader page_loader.log`
+
+**You can use it as a python module:** 
+
+`from page_loader import download`
+
+`download(source_url, exist_folder_path)`
 
 ---
 
@@ -48,4 +63,4 @@ Logging errors:
 
 Downloading with ChargingBars:
 
-[![asciicast](https://asciinema.org/a/Nf6KUo9iJZVQqegg77HP7py0C.svg)](https://asciinema.org/a/Nf6KUo9iJZVQqegg77HP7py0C)
+[![asciicast](https://asciinema.org/a/lwivpiIFkBcx40Igac1KHd1YQ.svg)](https://asciinema.org/a/lwivpiIFkBcx40Igac1KHd1YQ)
