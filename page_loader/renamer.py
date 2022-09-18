@@ -4,7 +4,7 @@
 
 import os
 import re
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 
 def clearing_url(url: str) -> str:
@@ -25,3 +25,17 @@ def make_name(url: str, ext='') -> str:
     name = "".join(char if re.match(mask, char) else indent
                    for char in clear_url)
     return name + ext if ext else name + '.html'
+
+
+def make_source_path(source_url, url):
+    """Make source path from source url."""
+    dir_name = make_name(url, ext="_files")
+    source_domain_name = urlparse(source_url).netloc
+
+    if not source_domain_name:
+        source_url = urljoin(url, clearing_url(source_url))
+
+    source_ext = os.path.splitext(source_url)[1]
+    source_file_name = make_name(source_url, source_ext)
+    source_path = os.path.join(dir_name, source_file_name)
+    return source_path

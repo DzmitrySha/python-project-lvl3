@@ -2,11 +2,13 @@
 Модуль для обработки/подготовки html и собирания ресурсов
 """
 
+import os
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from page_loader.app_logger import make_logger
-from page_loader.renamer import make_name
+from page_loader.in_out import write_to_file
+from page_loader.renamer import make_name, make_source_path
 
 logger = make_logger(__name__)
 
@@ -19,7 +21,7 @@ tags = {
 
 def make_soup(url) -> BeautifulSoup:
     try:
-        response = requests.get(url)  # запрос на сервер
+        response = requests.get(url)
         response.raise_for_status()
 
     except (requests.exceptions.MissingSchema,
@@ -39,7 +41,7 @@ def make_soup(url) -> BeautifulSoup:
     return soup
 
 
-def prepare_resources_urls(soup: BeautifulSoup, url: str) -> list:
+def get_resources_urls(soup: BeautifulSoup, url: str) -> list:
     resources_urls = []
     domain_name = urlparse(url).netloc
     soup_tags = soup.find_all(tags.keys())
@@ -48,32 +50,36 @@ def prepare_resources_urls(soup: BeautifulSoup, url: str) -> list:
         for attr in set(tags.values()):
             resources_urls.append(src.get(attr))
 
-    resources_urls = filter(lambda x: x is not None, resources_urls)
-    resources_urls = filter(
-        lambda x: urlparse(x).netloc == domain_name or not urlparse(x).netloc,
-        resources_urls)
-    resources_urls_paths = list((url, make_name(url)) for url in resources_urls)
+    resources_urls = filter(lambda x: x is not None and                 # noqa W504
+        (urlparse(x).netloc == domain_name or not urlparse(x).netloc),  # noqa E128
+        resources_urls
+    )
+
+    resources_urls_paths = list((src_url, make_source_path(src_url, url))
+                                for src_url in resources_urls if resources_urls)
 
     return resources_urls_paths
 
 
-# def replace_urls(soup, diff_urls: list):
-#     for pair in diff_urls:
-#         if soup.find(href=pair['old_url']):
-#             sfind = soup.find(href=pair['old_url'])
-#             sfind['href'] = sfind['href'].replace(
-#                 pair['old_url'], pair['new_url'])
-#         if soup.find(src=pair['old_url']):
-#             sfind = soup.find(src=pair['old_url'])
-#             sfind['src'] = sfind['src'].replace(
-#                 pair['old_url'], pair['new_url'])
+def replace_urls(soup: BeautifulSoup, urls_paths: list):
+    for url, path in urls_paths:
+        if soup.find(href=url):
+            sfind = soup.find(href=url)
+            sfind['href'] = sfind['href'].replace(url, path)
+        if soup.find(src=url):
+            sfind = soup.find(src=url)
+            sfind['src'] = sfind['src'].replace(url, path)
 
 
-def prepare_resources(url: str):
+def prepare_resources(url: str, temp_folder=""):
     soup = make_soup(url)
-    resources = prepare_resources_urls(soup, url)
-    html_file_path = make_name(url)
-    return resources, html_file_path
+    resources_urls_paths = get_resources_urls(soup, url)
+
+    replace_urls(soup, resources_urls_paths)
+    html_file_path = os.path.join(temp_folder, make_name(url))
+    write_to_file(html_file_path, soup.prettify())
+
+    return resources_urls_paths, html_file_path
 
 
-print(prepare_resources("https://page-loader.hexlet.repl.co"))
+# print(prepare_resources("https://page-loader.hexlet.repl.co"))
