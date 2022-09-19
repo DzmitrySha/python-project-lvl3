@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from page_loader.app_logger import make_logger
 from page_loader.in_out import write_to_file
-from page_loader.renamer import make_name, make_source_path
+from page_loader.renamer import make_name, make_path
 
 logger = make_logger(__name__)
 
@@ -54,10 +54,8 @@ def get_resources_urls(soup: BeautifulSoup, url: str) -> list:
         (urlparse(x).netloc == domain_name or not urlparse(x).netloc),  # noqa E128
         resources_urls
     )
-
-    resources_urls_paths = list((src_url, make_source_path(src_url, url))
+    resources_urls_paths = list((src_url, make_path(src_url, url))
                                 for src_url in resources_urls if resources_urls)
-
     return resources_urls_paths
 
 
@@ -80,6 +78,3 @@ def prepare_resources(url: str, temp_folder=""):
     write_to_file(html_file_path, soup.prettify())
 
     return resources_urls_paths, html_file_path
-
-
-# print(prepare_resources("https://page-loader.hexlet.repl.co"))

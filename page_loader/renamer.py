@@ -27,7 +27,7 @@ def make_name(url: str, ext='') -> str:
     return name + ext if ext else name + '.html'
 
 
-def make_source_path(source_url, url):
+def make_path(source_url, url):
     """Make source path from source url."""
     dir_name = make_name(url, ext="_files")
     source_domain_name = urlparse(source_url).netloc
@@ -37,5 +37,5 @@ def make_source_path(source_url, url):
 
     source_ext = os.path.splitext(source_url)[1]
     source_file_name = make_name(source_url, source_ext)
-    source_path = os.path.join(dir_name, source_file_name)
-    return source_path
+    source_path_name = os.path.join(dir_name, source_file_name)
+    return source_path_name
