@@ -7,16 +7,19 @@ FIXTURES_FOLDER = 'fixtures'
 EXPECTED_FOLDER = 'fixtures/expected'
 EXPECTED_FILES_FOLDER = 'fixtures/expected/page-loader-hexlet-repl-co_files'
 FILES_PATHS = ['page-loader-hexlet-repl-co-courses.html',
-               'page-loader-hexlet-repl-co-assets-professions-python.jpg',
+               'page-loader-hexlet-repl-co-assets-professions-nodejs.png',
                'page-loader-hexlet-repl-co-assets-application.css',
                'page-loader-hexlet-repl-co-script.js'
                ]
 
 
-# @pytest.mark.parametrize()
-# def file_paths():
-#     return os.path.join(
-#         os.path.dirname(__file__), EXPECTED_FILES_FOLDER, FILES_PATHS)
+@pytest.fixture
+def file_paths():
+    file_paths = [
+        os.path.join(os.path.dirname(__file__), EXPECTED_FILES_FOLDER, path)
+        for path in FILES_PATHS
+    ]
+    return file_paths
 
 
 @pytest.fixture
