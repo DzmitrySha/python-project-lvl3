@@ -63,4 +63,4 @@ Logging errors:
 
 Downloading with ChargingBars:
 
-[![asciicast](https://asciinema.org/a/lwivpiIFkBcx40Igac1KHd1YQ.svg)](https://asciinema.org/a/lwivpiIFkBcx40Igac1KHd1YQ)
+[![asciicast](https://asciinema.org/a/RE5YZnMx1ut8I3GkX4arnreJf.svg)](https://asciinema.org/a/RE5YZnMx1ut8I3GkX4arnreJf)
