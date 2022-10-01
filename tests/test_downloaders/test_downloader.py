@@ -3,6 +3,7 @@
 import os
 import pytest
 import tempfile
+import requests
 from bs4 import BeautifulSoup
 from unittest.mock import Mock
 from page_loader import prepare_data, downloader
@@ -58,11 +59,6 @@ def test_create_dir():
         assert not os.path.exists("none")
 
 
-def test_make_soup_exceptions(urls):
-    with pytest.raises(Exception):
-        make_soup(urls['bad_url'])
-
-
 def test_download(urls, file_paths,
                   before_html_path,
                   result_html_path,
@@ -115,67 +111,13 @@ def test_prepare_resources(before_html_path, urls):
     assert prepared_resources == PREPARED_RESOURCES
 
 
-# def test_download(before_html_path, result_html_path,
-#                   requests_mock, urls
-#                   ):
-#
-#     soup = BeautifulSoup(read_file(before_html_path), "html.parser")
-#     requests_mock.get(urls['ok_url'], text=soup.prettify())
-#     mock_data = requests.get(urls['ok_url'], result_html_path).text
-#     # print(mock_data)
-#     html_file_content = read_file(result_html_path)
-#
-#     with tempfile.TemporaryDirectory() as tmpdirname:
-#         prepare_data.prepare_resources = Mock(return_value=PREPARED_RESOURCES)
-#         in_out.write_to_file = Mock()
-#
-#         print(html_file_content)
-#         html_file_path = downloader.download(urls['ok_url'], tmpdirname)[1]
-#
-#         assert mock_data == html_file_content
+@pytest.mark.parametrize('code', [403, 404, 501])
+def test_repsonse_errors(urls, code, requests_mock):
+    requests_mock.get(urls['ok_url'], status_code=code)
+    response = requests.get(urls['ok_url'])
+    assert response.status_code == code
 
 
-# def test_download_resources(
-#         before_html_path, jpg_file_path,
-#         css_file_path, js_file_path,
-#         result_html_path, html_file_path,
-#         urls, requests_mock
-# ):
-#     before_html_content = read_file(before_html_path)
-#     result_html_content = read_file(result_html_path)
-#     html_content = read_file(html_file_path)
-#     jpg_content = read_file(jpg_file_path, 'rb')
-#     css_content = read_file(css_file_path)
-#     js_content = read_file(js_file_path, 'rb')
-#     mock_content = 'not_exist'
-#
-#     requests_mock.get(urls['ok_url'], text=result_html_content)
-#     requests_mock.get(HTML_URL, text=html_content)
-#     requests_mock.get(JPG_URL, content=jpg_content)
-#     requests_mock.get(CSS_URL, text=css_content)
-#     requests_mock.get(JS_URL, content=js_content)
-#     requests_mock.get(MOCK_URL, text=mock_content)
-#
-#     soup = BeautifulSoup(before_html_content, "html.parser")
-#
-#     with tempfile.TemporaryDirectory() as tmpdirname:
-#         downloader.download(urls['ok_url'], tmpdirname)
-#         dir_path = os.path.join(tmpdirname, DIR_NAME)
-#
-#         for file_name in FILENAMES.values():
-#             file_path = os.path.join(tmpdirname, DIR_NAME, file_name)
-#             assert os.path.exists(file_path)
-#
-#         with open(os.path.join(dir_path, FILENAMES["html_mock"])) as f:
-#             assert f.read() == html_content
-#
-#         with open(os.path.join(dir_path, FILENAMES["jpg_mock"]), 'rb') as f:
-#             assert f.read() == jpg_content
-#
-#         with open(os.path.join(dir_path, FILENAMES["css_mock"])) as f:
-#             assert f.read() == css_content
-#
-#         with open(os.path.join(dir_path, FILENAMES["js_mock"]), 'rb') as f:
-#             assert f.read() == js_content
-#
-#         assert not os.path.exists(os.path.join(tmpdirname, mock_content))
+def test_make_soup_exceptions(urls):
+    with pytest.raises(Exception):
+        make_soup(urls['bad_url'])
